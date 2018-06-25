@@ -4,3 +4,4 @@ var express = require('express'),
 	bcrypt = require('bcrypt'),
 	router = express.Router()
 
+module.exports = router

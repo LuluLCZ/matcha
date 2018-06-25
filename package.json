@@ -6,11 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "age-calculator": "^1.0.0",
+    "bcrypt": "^2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
+    "iplocation": "^5.0.1",
     "jade": "~1.11.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "mysql": "^2.15.0",
+    "parse": "^1.11.1",
+    "regex-email": "^1.0.2",
+    "semantic-ui": "^2.3.2"
   }
 }

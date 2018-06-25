@@ -3,10 +3,11 @@ let mysql = require('mysql');
 let connexion = mysql.createConnection({
 	host: 'localhost',
 	port: 3306,
-	user: 'root',
+	user: 'toor',
+	password: 'poutre',
 	database: 'matcha'
 });
 
-connection.connect();
+connexion.connect();
 
 module.exports = connexion;
