@@ -1,125 +1,50 @@
 var express = require('express'),
-	connect = require('../config/database.js'),
-	session = require('express-session'),
-	bcrypt = require('bcrypt'),
-	regex = require('regex-email'),
-	iplocation = require('iplocation'),
-	ageCalc = require('age-calculator'),
-	parse = require('parse').parse,
-	router = express.Router()
+    connect = require('../config/database.js'),
+    session = require('express-session'),
+    bcrypt = require('bcrypt'),
+    regex = require('regex-email'),
+    iplocation = require('iplocation'),
+    ageCalc = require('age-calculator'),
+    parse = require('parse').parse,
+    router = express.Router()
 
-var {ageFromDateString, AgeFromDate} = require('age-calcultator')
-const	salt = 10
+    router.use(function timeLog(req, res, next) {
+        console.log('Time: ', Date.now());
+        next();
+      });
 
-router.post('/', function(req, res) {
-	var login = req.body.login,
-		fname = req.body.fname,
-		lname = req.body.lname,
-		email = req.body.email,
-		gender = req.body.gender,
-		city = req.body.city,
-		age = req.body.age,
-		pswd = req.body.pswd,
-		cpswd = req.body.cpswd,
-		interest = req.body.interest
-	var RegexMin = /[a-z]/,
-		RegexMax = /[A-Z]/,
-		RegexBoth = /[a-zA-Z]/,
-		RegexAll = /[a-zA-Z0-9]/,
-		RegexMore = /[a-zA-Z-0-9\#\$\%\^\&\*\,\.]/,
-		RegexDate = /^\d\d\d\d-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/
-	var	hash = bcrypt.hashSync(pswd, salt)
-	if (login && name && lastname && email && age && gender && city && pswd && cpswd) {
-		connect.query("SELECT * FROM user WHERE login = ? OR email = ?", [login, email], (err, rows, result) => {
-			if (err) {
-				req.session.error = 'Une erreur est survenue.'
-				res.redirect('/')
-			}
-		if (login.length > 60 || email.length > 150 || lastname.length > 60 || name.length > 60) {
-			req.session.error = 'Champ trop long!'
-			res.redirect('/')
-		} else if (!regex.test(email)) {
-			req.session.error = 'Format email invalide!'
-			res.redirect('/')
-		} else if (login.search(RegexAll)) {
-			req.session.error = 'Le login ne peux comporter que des caracteres de A a Z et des chiffres!'
-			res.redirect('/')
-		} else if (name.search(RegexBoth) || lastname.search(RegexBoth)) {
-			req.session.error = 'Votre nom ne peux pas contenir de caracteres autres que l\'alphabet meme si vous avez un nom composé!'
-			res.redirect('/')
-		} else if (city.search(RegexBoth)) {
-			req.session.error = 'Le nom de votre ville ne peux pas comporter d\'accents, ou autre caractere speciaux!'
-			res.redirect('/')
-		} else if (pswd != cpswd) {
-			req.session.error = 'Les mots de passe ne sont pas identiques!'
-			res.redirect('/')
-		} else if (!pswd.search(/\d/)) {
-			req.session.error = 'Le mot de passe doit contenir au moins un chiffre!'
-			res.redirect('/')
-		} else if (pswd.search(RegexMin) == -1) {
-			req.session.error = 'Le mot de passe doit contenir au moins une minuscule!'
-			res.redirect('/')
-		} else if (pswd.search(RegexMax) == -1) {
-			req.session.error = 'Le mot de passe doit contenir au moins une majuscule!'
-			res.redirect('/')
-		} else if (pswd.search(RegexMore) == -1) {
-			req.session.error = 'Le mot de passe ne peux pas contenir de caracteres spéciaux mise a part #, $, %, ^, &, *, ,, et . '
-			res.redirect('/')
-		} else if (pswd.length < 6) {
-			req.session.error = 'Le mot de passe doit contenir au minimum 6 caracteres!'
-			res.redirect('/')
-		} else if (req.body.age.search(RegexDate)) {
-			req.session.error = 'Le format de la date n\'est pas valide!'
-			res.redirect('/')
-		} else if (name.length < 3 || lastname.length < 3) {
-			req.session.error = 'Le nom fait moins de 2 caracteres'
-			res.redirect('/')
-		} else if (pswd.length > 15) {
-			req.session.error = 'Le mot de passe doit contenir au maximum 15 caracteres!'
-			res.redirect('/')
-		} else if (rows[0] && rows[0]['email']) {
-			req.session.error = 'L\'email est déjà utilisé'
-			res.redirect('/')
-		} else if (rows[0] && rows[0]['login']) {
-			req.session.error = "Le nom d'utilisateur est déjà utilisé"
-			res.redirect('/')
-		} else if (age < 18) {
-			req.session.error = "Vous etes trop jeune"
-			res.redirect('/')
-		} else {
-			var datarand = "t" + Math.random(555, 9560)
-			connect.query('INSERT INTO popularity SET login = ?, famous = 5', [login], (err, rows, result) => {
-				if (err) console.log(err)
-				connect.query('INSERT INTO user SET login = ?, name = ?, lastname = ?, email = ?, passwd = ?, register = ?, age = ?, sexe = ?, city = ?, interest = ?, hash = ?', [login, name, lastname, email, hash, new Date(), age, gender, city, interest, datarand], (err, rows, result) => {
-					if (err) {
-						console.log(err)
-						req.session.error = 'Une erreur est survenue. :)'
-						res.redirect('/')
-					} else {
-						iplocation(req.ip, function(error, res) {
-							if (res && res['city']) {
-								connect.query('UPDATE user SET latitude = ?, longitude = ? WHERE login = ?', res['latitude'], res['longitude'], [login], (err) => {
-									if (err) console.log(err)
-								})
-							} else {
-								connect.query('UPDATE user SET city = "Paris", latitude = 48.8965, longitude = 2.3182 WHERE login = ?', [login], (err) => {
-									if (err) console.log(err)
-								})
-							}
-						})
-					}
-					var s = 'Le formulaire a bien été rempli, bienvenue sur Matcha '
-					s += login
-					req.session.success = s
-					res.redirect('/login')
-				})
-			})
-		}
-		})
-	} else {
-		req.session.error = 'Veuillez remplir tous les champs.'
-		res.redirect('/')
-	}
-})
-
-module.exports = router;
+      router.post('/', function(req, res) {
+          //Recuprer toutes les variables de la page d'inscription via le formulaire en post avec
+          //le router.post('/'...).
+        var login = req.body.login,
+            gender = req.body.gender,
+            fname = req.body.fname,
+            lname = req.body.lname,
+            pswd = req.body.pswd,
+            cpswd = req.body.cpswd,
+            email = req.body.email,
+            city = req.body.city,
+            age = req.body.age,
+            interest = req.body.interest
+        
+            //verifier que toutes les variables sont bien recuperees
+            if (login && gender && fname && lname && pswd && cpswd && email && city && age && interest)
+            {
+                var queryString = "SELECT * FROM users WHERE login = ? OR email = ?"
+                connect.query(queryString, [req.body.login, req.body.email],function(err, rows, fields) {
+                    if (err) throw err;
+                    console.log("Everythng's good");
+                    res.json(rows);
+                })
+            }
+            else
+            {
+                res.redirect('/');
+                console.log('problem');
+            }
+      });
+      // define the success route
+      router.get('/success', function(req, res) {
+        res.send('Registration successfull. You will receive an email with your activation link. See you soon !');
+      });
+module.exports = router

@@ -1,0 +1,225 @@
+<% include header %>
+
+<div id="wrapper">
+	
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+	<div class="container-fluid">
+	
+	<!-- FORM -->
+	<div class="ui raised very padded text container segment">
+		<h4>Tell Us About Yourself</h4>
+		<hr>
+		<div class="field example">
+			<!-- <img src="images/matcha1.png" class="logoform"> -->
+			<form class="ui form segment" id="loginform" method="post" action="/register">
+				<div class="two fields">
+					<div class="field">
+						<label>Login</label>
+						<input placeholder="Login" name="login" type="text" id="login">
+					</div>
+					<div class="field">
+						<label>Gender</label>
+						<div class="ui dropdown selection" tabindex="0">
+							<select name="gender" id="gender">
+								<option value="">Gender</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+								<option value="other">Other</option>
+							</select>
+								<i class="dropdown icon"></i>
+								<div class="default text">Gender</div>
+								<div class="menu" tabindex="-1">
+									<div class="item" data-value="male">Male</div>
+									<div class="item" data-value="female">Female</div>
+									<div class="item" data-value="other">Other</div>
+								</div>
+						</div>
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label>First name</label>
+						<input placeholder="First name" name="fname" type="text" id="fname">
+					</div>
+					<div class="field">
+						<label>Last name</label>
+						<input placeholder="Last name" name="lname" type="text" id="lname">
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label>Password</label>
+						<input placeholder="Type your password" name="pswd" type="password" id="pswd">
+					</div>
+					<div class="field">
+						<label>Confirm your password</label>
+						<input placeholder="Retype your password" name="cpswd" type="password" id="cpswd">
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label>Email</label>
+						<input placeholder="Email" name="email" type="email" id="email">
+					</div>
+					<div class="field">
+						<label>City</label>
+						<input placeholder="City" name="city" type="text" id="city">
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label>Birth date</label>
+						<input name="age" type="date" id="age">
+					</div>
+					<div class="field">
+						<label>Interest</label>
+						<div class="ui dropdown selection" tabindex="0">
+							<select name="interest" id="interest">
+								<option value="">Interest</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+								<option value="other">Other</option>
+							</select>
+								<i class="dropdown icon"></i>
+								<div class="default text">Interest</div>
+								<div class="menu" tabindex="-1">
+									<div class="item" data-value="male">Male</div>
+									<div class="item" data-value="female">Female</div>
+									<div class="item" data-value="both">Both</div>
+								</div>
+						</div>
+					</div>
+				</div>
+				<div class="ui center">
+					<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="nom" VALUE=" Envoyer ">
+				</div>
+				<div class="ui error message"></div>
+			</form>
+		</div>
+	</div>
+
+
+	<% include footer %>
+
+	<script>
+		$('.ui.form')
+		.form({
+		fields: {
+			login: {
+				identifier: 'login',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your login'
+				  },
+				  {
+					type   : 'minLength[4]',
+					prompt : 'Your login is too short'
+				  }
+				]
+			},
+			gender: {
+				identifier: 'gender',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please select your Gender'
+				  }
+				]
+			},
+			fname: {
+				identifier: 'fname',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your first name'
+				  },
+				  {
+					type   : 'minLength[2]',
+					prompt : 'Your first name is too short'
+				  }
+				]
+			},
+			lname: {
+				identifier: 'lname',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your last name'
+				  },
+				  {
+					type   : 'minLength[2]',
+					prompt : 'Your last name is too short'
+				  }
+				]
+			},
+			pswd: {
+				identifier: 'pswd',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your password'
+				  },
+				  {
+					type   : 'minLength[8]',
+					prompt : 'Your password shhould contain at least 8 char'
+				  }
+				]
+			},
+			cpswd: {
+				identifier: 'cpswd',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please confirm your password'
+				  },
+				  {
+					type   : 'match[pswd]',
+					prompt : 'Passwords should be matching'
+				  }
+				]
+			},
+			email: {
+				identifier: 'email',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your email'
+				  },
+				  {
+					type   : 'email',
+					prompt : 'Your email is not valid'
+				  }
+				]
+			},
+			city: {
+				identifier: 'city',
+				rules: [
+					{
+					type   : 'empty',
+					prompt : 'Please enter your city'
+					}
+				]
+			},
+			age: {
+				identifier: 'age',
+				rules: [
+					{
+						type   : 'empty',
+						prompt : 'Please enter your Birthdate'
+					}
+				]
+			},
+			interest: {
+				identifier: 'interest',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please select your interest'
+				  }
+				]
+			},
+		}
+	});
+	</script>

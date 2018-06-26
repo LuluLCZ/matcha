@@ -1,0 +1,20 @@
+<!-- semantic -->
+<script src="semantic/dist/semantic.min.js"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault()
+				$("#wrapper").toggleClass("toggled")
+			})
+			$(document).ready(function(){
+				$('.right.menu.open').on("click",function(e){
+					e.preventDefault()
+					$('.ui.vertical.menu').toggle()
+				})
+				$('.ui.dropdown').dropdown()
+			})
+		</script>
+</body>
+</html>

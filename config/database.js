@@ -1,10 +1,9 @@
-let mysql = require('mysql');
+var mysql = require('mysql');
 
-let connexion = mysql.createConnection({
+var connexion = mysql.createConnection({
 	host: 'localhost',
-	port: 3306,
-	user: 'toor',
-	password: 'poutre',
+	port: 3307,
+	user: 'connect',
 	database: 'matcha'
 });
 
