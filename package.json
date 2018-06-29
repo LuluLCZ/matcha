@@ -7,11 +7,11 @@
   },
   "dependencies": {
     "age-calculator": "^1.0.0",
-    "bcrypt": "^2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
     "express": "~4.16.0",
+    "express-fileupload": "^0.4.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
     "iplocation": "^5.0.1",
@@ -21,6 +21,7 @@
     "nodemon": "^1.17.5",
     "parse": "^1.11.1",
     "regex-email": "^1.0.2",
-    "semantic-ui": "^2.3.2"
+    "semantic-ui": "^2.3.2",
+    "socket.io": "^2.1.1"
   }
 }

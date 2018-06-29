@@ -1,0 +1,129 @@
+<% include header %>
+
+<div class="ui segment">
+	<h2 class="ui right floated header">Your profil</h2>
+	<br>
+	<hr>
+	<br>
+	<div class="ui grid">
+	  <div class="doubling three column row">
+		<div class="column">
+			<div class="ui segment">
+				<form class="ui form segment fluid" method="post" action="/profil/upload_pic/1" enctype="multipart/form-data">
+					<input class="form-control fluid" type="file" name="uploaded_image" accept="image/*"/>
+					<hr>
+					<div class="ui center">
+						<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="nom" VALUE=" Envoyer ">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="column">
+			<div class="ui segment">
+				<div class="ui teal empty circular label"></div> Online
+				<hr class="ui">
+				<form class="ui form segment" method="post" action="/profil/edit_info">
+					<div class="ui large header" style="color:Grey"> <%= locals.fname + ' ' + locals.lname %> </div>
+					<% if (locals.gender == "male") { %>
+						<p>
+							Man, <%= locals.age %>years old
+						</p>
+					<% } else if (locals.gender == "female") { %>
+						<p>
+							Woman, <%= locals.age %>years old
+						</p>
+					<% } %>
+					<% if (locals.interest == "male") { %>
+						<p> Interested by: &nbsp; Men <p>
+					<% } else if (locals.interest == "female") { %>
+						<p> Interested by: &nbsp; Women <p>
+					<% } else if (locals.interest == "both") { %>
+						<p> Interested by: &nbsp; Both <p>
+					<% } %>
+					<hr class="ui">
+					<div class="two fields">
+						<div class="field">
+							<label>Edit Name</label>
+							<input placeholder="First Name" name="fname" type="text">
+						<hr class="ui">
+							<div class="ui center">
+								<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
+							</div>
+						</div>
+						<div class="field">
+							<label>Edit last name</label>
+							<input placeholder="Last Name" name="lname" type="text">
+						<hr class="ui">
+							<div class="ui center">
+								<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
+							</div>
+						</div>
+					</div>
+					<hr class="ui">
+					<div class="two fields">
+						<div class="field">
+							<label>Edit interest</label>
+							<div class="ui dropdown selection fluid" tabindex="0">
+								<select name="interest" id="interest">
+									<option value="">Interest</option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+									<option value="both">Both</option>
+								</select>
+									<i class="dropdown icon"></i>
+									<div class="default text">Interest</div>
+									<div class="menu" tabindex="-1">
+										<div class="item" data-value="male">Male</div>
+										<div class="item" data-value="female">Female</div>
+										<div class="item" data-value="both">Both</div>
+									</div>
+							</div>
+							<hr class="ui">
+							<div class="ui center">
+								<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
+							</div>
+						</div>
+						<div class="field">
+							<label>Edit gender</label>
+							<div class="ui dropdown selection fluid" tabindex="0">
+							<select name="gender" id="gender">
+								<option value="">Gender</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+								<option value="other">Other</option>
+							</select>
+								<i class="dropdown icon"></i>
+								<div class="default text">Gender</div>
+								<div class="menu fluid" tabindex="-1">
+									<div class="item" data-value="male">Male</div>
+									<div class="item" data-value="female">Female</div>
+									<div class="item" data-value="other">Other</div>
+								</div>
+						</div>
+						<hr class="ui">
+							<div class="ui center">
+								<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="column">
+			<div class="ui segment">
+				<form class="ui form segment" method="post" action="/profil">
+					<div class="tag">
+				
+					</div>
+					<div class="field">
+						<label>Hobbies or interests</label>
+						<input type="text" name="tag" placeholder="exemple: musculation">
+					</div>
+					<div class="ui center">
+						<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="name" VALUE=" Send ">
+					</div>
+				</form>
+			</div>
+		</div>
+		<% include footer %>
+		

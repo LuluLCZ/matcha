@@ -1,7 +1,6 @@
 var express = require('express'),
     connect = require('../config/database.js'),
     session = require('express-session'),
-    bcrypt = require('bcrypt'),
     regex = require('regex-email'),
     iplocation = require('iplocation'),
     ageCalc = require('age-calculator'),
@@ -34,13 +33,23 @@ var express = require('express'),
                 connect.query(queryString, [req.body.login, req.body.email],function(err, rows, fields) {
                     if (err) throw err;
                     console.log("Everythng's good");
-                    res.json(rows);
+                    if (!rows[0])
+                    {
+                        connect.query("INSERT INTO users(login, gender, fname, lname, pswd, email, city, age, interest) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", [login, gender, fname, lname, pswd, email, city, 18, interest], function(err, result) {
+                            if (err) throw err;
+                            res.redirect("/login");
+                        })
+                    }
+                    else
+                    {
+                        res.redirect("/");
+                    }
                 })
             }
             else
             {
                 res.redirect('/');
-                console.log('problem');
+                console.log('problem, all the variables haven\'t been registered successfully');
             }
       });
       // define the success route

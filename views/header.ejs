@@ -1,11 +1,77 @@
 <!DOCTYPE HTML>
 <head>
-	<title>register</title>
 	<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
 	<script
 	  src="https://code.jquery.com/jquery-3.1.1.min.js"
 	  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 	  crossorigin="anonymous"></script>
 	<script src="semantic/dist/semantic.min.js"></script>
+	<script scr="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/components/accordion.js"></script>
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 <body>
+		<div class="ui secondary  menu">
+				<% if (locals.ok) { %>	
+			<a href="/home" class="item">
+					Home
+				</a>
+				<% } else { %>
+					<a href="/home" class="item">
+						Home
+					</a>
+					<% } %>
+					<% if (locals.login){ %>
+				<a href="/messages" class="item">
+					Messages
+				</a>
+				<a href="matches" class="item">
+					Matches
+				</a>
+				<a href="/profil" class="item">
+					Profil
+				</a>
+				<% } %>
+				<div class="right menu">
+					<% if (locals.login) { %>
+					<div class="item">
+						<div class="ui icon input">
+							<input type="text" placeholder="Search...">
+							<i class="search link icon"></i>
+						</div>
+					</div>
+					<a class="ui item" href="/logout" onclick="io.disconnect()">
+						Logout
+					</a>
+					<% } else { %>
+						<a class="ui item" href="/login">
+							Login
+						</a>
+						<a class="ui item" href="/forgot">
+							Forgot
+						</a>
+						<% } %>
+				</div>
+			</div>
+
+			<div class="ui main container">
+				<% if (locals && locals.error) { %>
+					<script>
+						toastr.error('<%= locals.error %>')
+					</script>
+				<% } %>
+				<% if (locals && locals.success) { %>
+					<script>
+						toastr.success('<%= locals.success %>')
+					</script>
+				<% } %>
+				<% if (locals && locals.warning) { %>
+					<script>
+						toastr.warning('<%= locals.warning %>')
+					</script>
+				<% } %>
+				<% if (locals && locals.info) { %>
+					<script>
+						toastr.info('<%= locals.info %>')
+					</script>
+				<% } %>
+			</div>	

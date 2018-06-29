@@ -1,0 +1,67 @@
+<% include header %>
+
+<div id="wrapper">
+	
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+	<div class="container-fluid">
+	
+	<!-- FORM -->
+	<div class="ui raised very padded text container segment">
+		<h4>Always good to see you !</h4>
+		<hr>
+		<div class="field example">
+			<!-- <img src="images/matcha1.png" class="logoform"> -->
+			<form class="ui form segment" id="loginform" method="post" action="/login">
+					<div class="field">
+						<label>Login</label>
+						<input placeholder="Login" name="login" type="text" id="login">
+					</div>
+					<div class="field">
+						<label>Password</label>
+						<input placeholder="Type your password" name="pswd" type="password" id="pswd">
+					</div>
+				<div class="ui center">
+					<INPUT class="fluid ui primary submit button" TYPE="submit" NAME="nom" VALUE=" Let's match ">
+				</div>
+				<div class="ui error message"></div>
+			</form>
+		</div>
+	</div>
+
+
+	<% include footer %>
+
+	<script>
+		$('.ui.form')
+		.form({
+		fields: {
+			login: {
+				identifier: 'login',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your login'
+				  },
+				  {
+					type   : 'minLength[4]',
+					prompt : 'Your login is too short'
+				  }
+				]
+			},
+			pswd: {
+				identifier: 'pswd',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your password'
+				  },
+				  {
+					type   : 'minLength[8]',
+					prompt : 'Your password shhould contain at least 8 char'
+				  }
+				]
+			},
+		}
+	});
+	</script>
