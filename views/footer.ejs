@@ -13,7 +13,13 @@
 					e.preventDefault()
 					$('.ui.vertical.menu').toggle()
 				})
-				$('.ui.dropdown').dropdown()
+			});
+				$('.ui.dropdown')
+				.dropdown({
+				allowAdditions: true,
+				apiSettings: {
+					url: '//api.semantic-ui.com/tags/{query}'
+				}
 			})
 		</script>
 </body>

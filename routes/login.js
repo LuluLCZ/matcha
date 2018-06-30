@@ -35,6 +35,17 @@ router.post('/', function(req, res){
 				req.session.gender = rows[0].gender
 				req.session.success = "You are now logged."
 				req.session.isloggedon = true
+				req.session.sumup = rows[0].sumup
+				if (rows[0].profpic)
+					req.session.profpic = rows[0].profpic
+				if (rows[0].pic2)
+					req.session.pic2 = rows[0].pic2
+				if (rows[0].pic3)
+					req.session.pic3 = rows[0].pic3
+				if (rows[0].pic4)
+					req.session.pic4 = rows[0].pic4
+				if (rows[0].pic5)
+					req.session.pic5 = rows[0].pic5
 				res.redirect('/home');
 				console.log('ofddfsdfsdfdsfsdfefdfdsfsdfsk');
 			}

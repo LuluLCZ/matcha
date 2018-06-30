@@ -75,6 +75,12 @@ app.use(function(req, res, next) {
 	res.locals.age = req.session.age
 	res.locals.interest = req.session.interest
 	res.locals.isloggedon = req.session.isloggedon
+	res.locals.profpic = req.session.profpic
+	res.locals.pic2 = req.session.pic2
+	res.locals.pic3 = req.session.pic3
+	res.locals.pic4 = req.session.pic4
+	res.locals.pic5 = req.session.pic5
+	res.locals.sumup = req.session.sumup
 	next()
 })
 
