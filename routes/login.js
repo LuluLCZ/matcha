@@ -35,7 +35,8 @@ router.post('/', function(req, res){
 				req.session.gender = rows[0].gender
 				req.session.success = "You are now logged."
 				req.session.isloggedon = true
-				req.session.sumup = rows[0].sumup
+				if (rows[0].sumup)
+					req.session.sumup = rows[0].sumup
 				if (rows[0].profpic)
 					req.session.profpic = rows[0].profpic
 				if (rows[0].pic2)
