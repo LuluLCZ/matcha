@@ -29,6 +29,27 @@ router.get('/', function(req, res) {
 						res.render('home', { title: 'Home', profil: profil })
 					})
 				}
+				else if (interest == 'both') {
+					connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic FROM users WHERE login != ? AND interest = ?', [login, 'both'], function(err, row) {
+						if (err) console.log(err)
+						var profil = row
+						res.render('home', { title: 'Home', profil: profil })
+					})
+				}
+				else if (interest == 'male' && gender == 'male') {
+					connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic FROM users WHERE login != ? AND gender = ? AND interest = ?', [login, 'male', 'male'], function(err, row) {
+						if (err) console.log(err)
+						var profil = row
+						res.render('home', { title: 'Home', profil: profil })
+					})
+				}
+				else if (interest == 'female' && gender == 'female') {
+					connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic FROM users WHERE login != ? AND gender = ? AND interest = ?', [login, 'female', 'female'], function(err, row) {
+						if (err) console.log(err)
+						var profil = row
+						res.render('home', { title: 'Home', profil: profil })
+					})
+				}
 			}
 		})
 	}

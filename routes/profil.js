@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 
 })
 
-router.get('/deltag/sdf', function(req, res) {
+router.get('/deltag/:tag', function(req, res) {
 	if (req.session && req.session.login)
 	{
 		var tag = req.params.tag

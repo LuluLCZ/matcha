@@ -22,7 +22,9 @@
 					<div class="ui card">
 						<div class="image">
 							<% if (pic) { %>
-								<img src="/images/<%= pic %>">
+								<a href="/user_profil/<%=login%>" class="ui medium image">
+									<img src="/images/<%= pic %>">
+								  </a>
 								<% } else { %>
 							<img src="/images/matthew.png">
 							<% } %>

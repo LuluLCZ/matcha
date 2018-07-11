@@ -1,0 +1,146 @@
+<% include header %>
+
+<div class="ui segment">
+	<h2 class="ui right floated header"><%= login %>'s profil</h2>
+	<br>
+	<hr>
+	<br>
+	<div class="ui grid">
+		<div class="ui top attached tabular fluid menu">
+			<a class="active item" data-tab="bio">Bio</a>
+			<a class="item" data-tab="pics">Pictures</a>
+		</div>
+		<div class="ui bottom attached active tab segment" data-tab="bio">
+			<div class="ui segment">
+				<div class="ui items">
+					<div class="item">
+						<% if (profpic) { %>
+							
+							<div class="ui medium image">
+								<img class="ui image" src="/images/<%= profpic %>">
+							</div>
+							
+							<%  } else { %>
+								<div class="ui medium image">
+									<img class="ui image" src="images/matthew.png">
+								</div>
+								<% } %>
+
+							<div class ="content">
+								<div class="ui large header" style="color:grey;"><%= locals.fname + ' ' + locals.lname %></div>
+								<div class="meta">
+									<div class="ui teal empty circular label"></div> Online
+									<% if (locals.gender == "male") { %>
+										<p>
+											Man, <%= locals.age %>years old
+										</p>
+									<% } else if (locals.gender == "female") { %>
+										<p>
+											Woman, <%= locals.age %>years old
+										</p>
+									<% } %>
+									<!-- <% if (locals.interest == "male") { %>
+										<p> Interested by: &nbsp; Men <p>
+									<% } else if (locals.interest == "female") { %>
+										<p> Interested by: &nbsp; Women <p>
+									<% } else if (locals.interest == "both") { %>
+										<p> Interested by: &nbsp; Both <p>
+									<% } %> -->
+								</div>
+								<hr class="ui">
+								<div class="description">
+									<div class="ui segment">
+										<p><%= sumup %></p>
+									</div>
+									<div class="ui segment">
+										<p><% if (tagReq) { %>
+											<% tagReq.forEach(function(element) { %>
+											<% var tagReq = element['tagReq'] %>
+											<a class="ui label">
+													<%= element["tagReq"] %>
+												</a>
+											<% }) %>
+										<% } %>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui bottom attached tab segment" data-tab="pics">
+				<div class="ui five column grid">
+					<div class="column">
+						<div class="ui fluid card">
+							<div class="ui image">
+								<% if (locals.profpic) { %>
+									<img class="ui image" src="/images/<%= profpic %>">
+								<% } else { %>
+									<img src="/images/ade.jpg">
+								<% } %>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="ui fluid card">
+							<div class="ui image">
+								<% if (pic2) { %>
+									<img src="images/<%= pic2 %>">
+								<% } else { %>
+									<img src="/images/stevejob.jpg">
+								<% } %>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="ui fluid card">
+							<div class="ui image">
+								<% if (locals.pic3) { %>
+									<img src="images/<%= pic3 %>">
+								<% } else { %>
+									<img src="/images/matthew.png">
+								<% } %>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="ui fluid card">
+							<div class="ui image">
+								<% if (locals.pic4) { %>
+									<img src="images/<%= pic4 %>">
+								<% } else { %>
+									<img src="/images/veronika.jpg">
+								<% } %>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="ui fluid card">
+							<div class="ui image">
+								<% if (locals.pic5) { %>
+									<img src="images/<%= pic5 %>">
+								<% } else { %>
+									<img src="/images/matthew.png">
+								<% } %>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+		
+		<% include footer %>
+		<script>
+ $('.menu .item').tab();
+$('.ui.dropdown').dropdown({
+  allowAdditions: true,
+})
+$('.tag.example .ui.dropdown')
+  .dropdown({
+    allowAdditions: true
+  })
+;
+		</script>

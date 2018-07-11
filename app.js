@@ -27,7 +27,8 @@ var		index = require('./routes/index'),
 		login = require('./routes/login'),
 		home = require('./routes/home'),
 		logout = require('./routes/logout'),
-		profil = require('./routes/profil')
+		profil = require('./routes/profil'),
+		user_profil = require('./routes/user_profil')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -93,7 +94,7 @@ app.use('/login', login)
 app.use('/home', home)
 app.use('/profil', profil)
 app.use('/logout', logout)
-
+app.use('/user_profil', user_profil)
 
 
 
