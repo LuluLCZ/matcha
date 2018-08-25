@@ -1,7 +1,10 @@
 var express = require('express'),
 connect = require('../config/database.js'),
 session = require('express-session'),
+bcrypt = require('bcrypt'),
 router = express.Router()
+
+const saltRound = 10;
 
 router.get('/', function(req, res, next) {
 	res.render('login', { title: 'Login' })
@@ -22,7 +25,7 @@ router.post('/', function(req, res){
 				res.redirect('/login')
 				console.log("It looks like your login doesn't exists")
 			}
-			else if (rows[0].pswd == pswd)
+			else if (bcrypt.compareSync(pswd, rows[0].pswd))
 			{
 				req.session.ok = true
 				req.session.login = login
@@ -52,7 +55,7 @@ router.post('/', function(req, res){
 			}
 			else
 			{
-				req.session.error = "It looks like your login doesn't exists";
+				req.session.error = "It looks like your login and your password don't match, please try again with another combinaison";
 				res.redirect('/login')
 				console.log(rows);
 				console.log(pswd, login);
@@ -62,10 +65,8 @@ router.post('/', function(req, res){
 	}
 	else
 	{
-		
 		req.session.error = "Please fill all the fields."
 		res.redirect('/login')
-		console.log('pt');
 	}
 })
 

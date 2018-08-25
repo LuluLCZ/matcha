@@ -65,20 +65,26 @@
 									</div>
 									<div class="ui segment">
 										<% if (blocked == "no") { %>
-											<a href="/user_profil/block/<%= login %>" class="item" style="text-decoration: none">
-												<i class="remove circle icon"></i>
+											<a href="/user_profil/block/<%=login%>" class="item" style="text-decoration: none">
+												<i class="remove circle icon"></i>Block
 											</a>
+											<br />
 										<% } else if (blocked == "yes") { console.log(blocked) %>
 											<a href="/user_profil/unblock/<%= login %>" class="item" style="text-decoration: none">
-												<i class="unlock alternate icon"></i>
+												<i class="unlock alternate icon"></i>Unblock
 											</a>
+											<br />
+										<% } if (liked == "yes") {%>
+											<a href="/user_profil/unlike/<%= login %>" class="item" style="text-decoration: none">
+												<i class="heart empty icon"></i>Unlike
+											</a>
+											<br />
+										<% } else if (liked == "no") { %>
+											<a href="/user_profil/like/<%= login %>" class="item" style="text-decoration: none">
+												<i class="heart icon"></i>Like
+											</a>
+											<br />
 										<% } %>
-										<a href="/user_profil/like/<%= login %>" class="item" style="text-decoration: none">
-											<i class="heart icon"></i>
-										</a>
-										<a href="/user_profil/unlike/<%= login %>" class="item" style="text-decoration: none">
-											<i class="heart empty icon"></i>
-										</a>
 									</div>
 								</div>
 							</div>

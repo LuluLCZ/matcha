@@ -5,7 +5,10 @@ var express = require('express'),
     iplocation = require('iplocation'),
     ageCalc = require('age-calculator'),
     parse = require('parse').parse,
+    bcrypt = require('bcrypt'),
     router = express.Router()
+
+    const saltRound = 10
 
     router.use(function timeLog(req, res, next) {
         console.log('Time: ', Date.now());
@@ -25,7 +28,7 @@ var express = require('express'),
             city = req.body.city,
             age = req.body.age,
             interest = req.body.interest
-        
+            passwdhash =  bcrypt.hashSync(pswd, saltRound)
             //verifier que toutes les variables sont bien recuperees
             if (login && gender && fname && lname && pswd && cpswd && email && city && age && interest)
             {
@@ -35,7 +38,7 @@ var express = require('express'),
                     console.log("Everythng's good");
                     if (!rows[0])
                     {
-                        connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?", [login, gender, fname, lname, pswd, email, city, 18, interest], function(err, result) {
+                        connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?", [login, gender, fname, lname, passwdhash, email, city, 18, interest], function(err, result) {
                             if (err) throw err;
                             res.redirect("/login");
                         })

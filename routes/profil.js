@@ -2,9 +2,12 @@ var express = require('express')
 var session = require('express-session')
 var connect = require('../config/database.js')
 var fileUpload = require('express-fileupload')
+var bcrypt = require('bcrypt')
 var router = express.Router()
 
 router.use(fileUpload())
+
+const saltRound = 10;
 
 router.get('/', function(req, res, next) {
 	if (req.session && req.session.login)
@@ -70,13 +73,72 @@ router.post('/tag_sumup', function(req, res) {
 		var queryStringtag = "INSERT INTO tags(login, tag) VALUES(?, ?)";
 		connect.query(queryStringtag, [req.session.login, tag], function(err) {
 			if (err) console.log(err);
-			req.session.success = "Votre tag a bien été ajouté";
+			req.session.success = "Your tag(s) have been added successfully";
 			res.redirect('/profil');
 		})
 	}
 })
 
+router.post('/edit_pail', function(req, res) {
+	var cpasswd = req.body.cpasswd,
+		npasswd = req.body.npasswd,
+		vnpasswd = req.body.vnpasswd,
+		nmail = req.body.nmail,
+		nlogin = req.body.nlogin
 
+		if (cpasswd && npasswd && vnpasswd)
+		{
+			npasswdhash = bcrypt.hashSync(npasswd, saltRound)
+			var queryString = "UPDATE users SET pswd = ? WHERE login = ?";
+			connect.query(queryString, [npasswdhash, req.session.login], function (err) {
+				if (err) throw err
+				req.session.success = "Your passord has been changed successfully"
+				res.redirect('/home')
+			})
+		}
+		else if (nmail)
+		{
+			connect.query("SELECT * FROM users WHERE email = ?", [nmail], function(err, rows, result) {
+				if (!rows[0] != null)
+				{
+					req.session.error = "The mail is already taken, please try another one"
+					res.redirect('/home')
+				}
+				else
+				{
+					var queryStringMail = "UPDATE users SET email = ? WHERE login = ?"
+					connect.query(queryStringMail, [nmail, req.session.login], function(err) {
+						if (err) throw err
+						req.session.success = "Your email has been changed successfully";
+						req.session.login = nlogin
+						res.redirect('/home')
+					})
+				}
+			})
+		}
+		else if (nlogin)
+		{
+			connect.query("SELECT * FROM users WHERE login = ?", [nlogin], function(err, rows, result) {
+				if (err) throw err;
+				console.log("REGARDER ICI"+ rows);
+				if (rows[0])
+				{
+					req.session.error = "The login is already taken, please try another one"
+					res.redirect('/home')
+				}
+				else
+				{
+					var queryStringLogin = "UPDATE users SET login = ? WHERE login = ?"
+					connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
+						if (err) throw err
+						req.session.success = "Your login has been changed successfully";
+						req.session.login = nlogin
+						res.redirect('/home')
+					})
+				}
+			})
+		}
+})
 
 router.post('/edit_info', function(req, res) {
 	var fname = req.body.fname,
