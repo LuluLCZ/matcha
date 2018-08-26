@@ -23,7 +23,6 @@ router.get('/:id', function(req, res, next) {
 							if (err1) throw err1;
 							if (rows1)
 							{
-								console.log('ok ifi')
 								queryString2 = "SELECT * FROM tags WHERE login = ?"
 								connect.query(queryString2, [login], function(err2, rows2, result2) {
 									if (err2) throw err2;
@@ -60,8 +59,8 @@ router.get('/:id', function(req, res, next) {
 										{
 											var blocked = "no"
 										}
-										connect.query("SELECT liker FROM likes WHERE liker = ? AND liked = ?", [req.session.login, login], function(err5, rows5, result) {
-											if (err5) console.log(err5)
+										connect.query("SELECT liker FROM likes WHERE liker = ? AND liked = ?", [req.session.login, login], function(err, rows5, result) {
+											if (err) console.log(err)
 											if (rows5[0] != undefined)
 											{
 												var liked = "yes"
@@ -153,14 +152,28 @@ router.get('/like/:id', function(req, res, next) {
 			var login = req.params.id
 			if (login)
 			{
-				connect.query("SELECT * FROM likes WHERE liker = ? AND liked = ?", [login, req.session.login], function(rows, err, result) {
+				connect.query("SELECT * FROM likes WHERE liked = ? AND liker = ?", [login, req.session.login], function(rows, err, result) {
 					if (err) console.log(err)
-					console.log(rows)
+					console.log("eh merce "+rows)
 					if (!rows)
 					{
                         connect.query("INSERT INTO likes SET liker = ?, liked = ?", [req.session.login , login], function(err, result) {
 						if (err) console.log(err)
-						res.redirect("/home")
+						connect.query("SELECT * FROM likes WHERE liker = ? AND liked = ?", [login, req.session.login], function(err, rows2, result2) {
+							if (err) throw err
+							console.log("PROBLEME "+rows2[0])
+							if (rows2[0] != undefined)
+							{
+								connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [req.session.login, login], function(err, rows3, result3) {
+									if (err) throw err
+									connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [login, req.session.login], function(err, rows4, result4) {
+										if (err) throw err
+										req.session.success = "Congratulation, you just matched ! Send a message to say how you're happy about it !"
+										res.redirect("/home")
+									})
+								})
+							}
+						})
 					})
 				}
 				else
@@ -185,7 +198,14 @@ router.get('/unlike/:id', function(req, res, next) {
 				queryString2 = "DELETE FROM likes WHERE liker = ? AND liked = ?"
 				connect.query(queryString2, [req.session.login, login], function(rows, err, results) {
 					if (err) console.log(err)
-					res.redirect('/home')
+					connect.query("DELETE FROM matching WHERE flogin = ? AND slogin = ?", [req.session.login, login], function(err) {
+						if (err) throw err
+						connect.query("DELETE FROM matching WHERE flogin = ? AND slogin = ?", [login, req.session.login], function(err) {
+							if (err) throw err
+							req.session.info = "You just unmatched "+login+" !"
+							res.redirect('/home')
+						})
+					})
 				})
 			}
 			else
