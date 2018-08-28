@@ -69,7 +69,14 @@ router.get('/:id', function(req, res, next) {
 											{
 												var liked = "no"
 											}
-											res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+											if (login != req.session.login)
+											{
+												var visit = "Your profile has been visited by "+req.session.login+" ! Take a look back, we never know.. !"
+												connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, visit, 0, new Date()], function(err) {
+													if (err) throw err
+													res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+												})
+											}
 										})
 									})
 								})
@@ -110,7 +117,15 @@ router.get('/block/:id', function(req, res, next) {
 							queryString2 = "INSERT INTO block(login, blocked) VALUES (?, ?)"
 							connect.query(queryString2, [req.session.login, login], function(rows, err, results) {
 							if (err) console.log(err)
-							res.redirect("/home")
+							if (login != req.session.login)
+							{
+								var blocked = "The user "+req.session.login+" blocked you ! Think twice.."
+								connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
+									if (err) throw err
+									req.session.success = "This user has been blocked successfully ! He won't arm you anymore"
+									res.redirect("/home")
+								})
+							}
 						})
 					}
 					else
@@ -135,7 +150,19 @@ router.get('/unblock/:id', function(req, res, next) {
 				queryString2 = "DELETE FROM block WHERE login = ? AND blocked = ?"
 				connect.query(queryString2, [req.session.login, login], function(rows, err, results) {
 					if (err) console.log(err)
-					res.redirect('/home')
+					if (login != req.session.login)
+					{
+						var blocked = "The user "+req.session.login+" unblocked you !"
+						connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
+							if (err) throw err
+							req.session.success = "This user has been unblocked successfully !"
+							res.redirect("/home")
+						})
+					}
+					else
+					{
+						res.redirect('/home')
+					}
 				})
 			}
 			else
@@ -173,6 +200,15 @@ router.get('/like/:id', function(req, res, next) {
 									})
 								})
 							}
+							else
+							{
+								var blocked = "The user "+req.session.login+" seems to like you ! That's something.."
+								connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
+									if (err) throw err
+									req.session.success = "This user has been notified that you like this profil !"
+									res.redirect("/home")
+								})
+							}
 						})
 					})
 				}
@@ -202,8 +238,12 @@ router.get('/unlike/:id', function(req, res, next) {
 						if (err) throw err
 						connect.query("DELETE FROM matching WHERE flogin = ? AND slogin = ?", [login, req.session.login], function(err) {
 							if (err) throw err
-							req.session.info = "You just unmatched "+login+" !"
-							res.redirect('/home')
+							var blocked = "Did you do something bad.. ? The user "+req.session.login+" unliked you ! That's something.."
+							connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
+								if (err) throw err
+								req.session.success = "This user has been unliked successfully !"
+								res.redirect("/home")
+							})
 						})
 					})
 				})

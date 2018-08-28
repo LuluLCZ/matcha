@@ -4,50 +4,19 @@
 	<div class="ui negative message">
 		<i class="close icon"></i>
 		<div class="header">
-			IL N'Y A PAS D'UTILISATEURS QUI POURRAIENT VOUS INTERRESSER
+			YOU DON'T HAVE ANY MATCH..
 		</div>
 	</div>
-<% } else { %>
-	<% profil.forEach(function(element) { %>
-		<% var fname = element["fname"] %>
-		<% var lname = element["lname"] %>
-		<% var gender = element["gender"] %>
-		<% var age = element["age"] %>
-		<% var sumup = element["sumup"] %>
-		<% var login = element["login"] %>
-		<% var pic = element["profpic"] %>
-	<div class="ui people shape">
-			<div class="sides">
-				<div class="side active">
-					<div class="ui card">
-						<div class="image">
-							<% if (pic) { %>
-								<a href="/user_profil/<%=login%>" class="ui medium image">
-									<img src="/images/<%= pic %>">
-								  </a>
-								<% } else { %>
-							<img src="/images/matthew.png">
-							<% } %>
-						</div>
-						<div class="content">
-							<div class="header"><%= fname %> <%= lname %></div>
-								<div class="meta">
-									<%= gender %>, <%= age %> years old
-								</div>
-								<div class="description">
-									<%= sumup %>
-								</div>
-							</div>
-							<div class="extra content">
-								<span class="right floated">
-								Joined in 2017
-								</span>
-								<span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		<% }) %>
+	<% } else { %>
+			<% profil.forEach(function(element) { %>
+				<% var fname = element["fname"] %>
+				<% var lname = element["lname"] %>
+				<% var gender = element["gender"] %>
+				<% var age = element["age"] %>
+				<% var sumup = element["sumup"] %>
+				<% var login = element["login"] %>
+				<% var pic = element["profpic"] %>
+				
+			<% }) %>
 		<% } %>
 		<% include footer %>

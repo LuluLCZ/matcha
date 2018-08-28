@@ -16,7 +16,7 @@
 		<% var sumup = element["sumup"] %>
 		<% var login = element["login"] %>
 		<% var pic = element["profpic"] %>
-	<div class="ui people shape">
+		<div class="ui people shape">
 			<div class="sides">
 				<div class="side active">
 					<div class="ui card">
@@ -24,30 +24,29 @@
 							<% if (pic) { %>
 								<a href="/user_profil/<%=login%>" class="ui medium image">
 									<img src="/images/<%= pic %>">
-								  </a>
-								<% } else { %>
-							<img src="/images/matthew.png">
+								</a>
+							<% } else { %>
+								<img src="/images/matthew.png">
 							<% } %>
 						</div>
 						<div class="content">
 							<div class="header"><%= fname %> <%= lname %></div>
-								<div class="meta">
-									<%= gender %>, <%= age %> years old
-								</div>
-								<div class="description">
-									<%= sumup %>
-								</div>
+							<div class="meta">
+								<%= gender %>, <%= age %> years old
 							</div>
-							<div class="extra content">
-								<span class="right floated">
-								Joined in 2017
-								</span>
-								<span>
+							<div class="description">
+								<%= sumup %>
 							</div>
+						</div>
+						<div class="extra content">
+							<span class="right floated">
+							Joined in 2017
+							</span>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 		<% }) %>
 		<% } %>
 		<% include footer %>

@@ -28,8 +28,10 @@ var		index = require('./routes/index'),
 		home = require('./routes/home'),
 		logout = require('./routes/logout'),
 		profil = require('./routes/profil'),
-		user_profil = require('./routes/user_profil')
-		matches = require('./routes/matches')
+		user_profil = require('./routes/user_profil'),
+		matches = require('./routes/matches'),
+		notifs = require('./routes/notifs'),
+		messages = require('./routes/messages')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -97,6 +99,8 @@ app.use('/profil', profil)
 app.use('/logout', logout)
 app.use('/user_profil', user_profil)
 app.use('/matches', matches)
+app.use('/notifs', notifs)
+app.use('/messages', messages)
 
 
 

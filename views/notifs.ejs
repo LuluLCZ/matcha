@@ -1,0 +1,32 @@
+<% include header %>
+
+<% if (profil == undefined) { %>
+	<div class="ui negative message">
+		<i class="close icon"></i>
+		<div class="header">
+			IL N'Y A PAS D'UTILISATEURS QUI POURRAIENT VOUS INTERRESSER
+		</div>
+	</div>
+<% } else { %>
+	<% profil.forEach(function(element) { %>
+		<% var content = element["content"] %>
+		<% var date = element["date"] %>
+		<% var gender = element["gender"] %>
+		<% var age = element["age"] %>
+		<% var sumup = element["sumup"] %>
+		<% var login = element["login"] %>
+		<% var pic = element["profpic"] %>
+		<div class="ui teal stacked segment">
+			<div class="ui list">
+				<div class="item">
+					<img class="ui avatar image" src="/images/<%=pic%>">
+					<div class="content">
+						<a class="header" href="/user_profil/<%=login%>"><%= login %></a>
+						<div class="description"><%=content%> <%= date %></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<% }) %>
+		<% } %>
+		<% include footer %>
