@@ -35,12 +35,12 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
 	if (req.session && req.session.login)
 	{
-		var login = req.params.id
-		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?)', [login, req.session.login, req.session.login, login], function(err, row, result) {
+		var sendto = req.params.id
+		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?)', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
 			if (err) console.log(err)
 			if (row)
 			{
-				var profil = row
+				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
 			}
 			else
 				res.redirect('/');

@@ -1,22 +1,63 @@
 <% include header %>
 
-<% if (profil == undefined) { %>
-	<div class="ui negative message">
-		<i class="close icon"></i>
-		<div class="header">
-			YOU DON'T HAVE ANY MATCH..
+
+
+
+
+
+
+<div class="ui comments"></div>
+<h3 class="ui right floated header">Your discussion with <%=sendto%></h3>
+<br><hr>
+<% message.forEach(function(element) { %>
+	<% var content = element["content"] %>
+	<% var name = element["login"] %>
+	<% var date = element["at"] %>
+	<% if (name == sendto) { %>
+		<div class="ui comment">
+			<div class="content">
+				<a class="author"><%=sendto%></a>
+				<div class="metadata">
+					<span class="date">lol</span>
+				</div>
+				<div class="text">
+					<%= content %>
+				</div>
+				<div class="actions">
+					<a class="reply">Reply</a>
+				</div>
+			</div>
 		</div>
-	</div>
 	<% } else { %>
-			<% profil.forEach(function(element) { %>
-				<% var fname = element["fname"] %>
-				<% var lname = element["lname"] %>
-				<% var gender = element["gender"] %>
-				<% var age = element["age"] %>
-				<% var sumup = element["sumup"] %>
-				<% var login = element["login"] %>
-				<% var pic = element["profpic"] %>
-				
-			<% }) %>
+		<div class="comment">
+			<div class="content">
+				<a class="author"><%=me%></a>
+				<div class="metadata">
+					<span class="date">lol</span>
+				</div>
+				<div class="text">
+					<%= content %>
+				</div>
+			</div>
+		</div>
 		<% } %>
-		<% include footer %>
+		<hr>
+	<% }) %>
+	<form class="ui reply form">
+		<div class="field">
+			<textarea></textarea>
+		</div>
+		<div class="ui blue labeled submit icon button">
+			<i class="icon edit"></i> Add Reply
+		</div>
+	</form>
+
+
+
+
+
+
+
+
+
+<% include footer %>
