@@ -1,20 +1,19 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var connect = require('./config/database.js')
-var bodyParser = require('body-parser');
-var session = require('express-session');
+var	express = require('express'),
+	createError = require('http-errors'),
+	http = require('http'),
+	path = require('path'),
+	cookieParser = require('cookie-parser'),
+	logger = require('morgan'),
+	connect = require('./config/database.js'),
+	bodyParser = require('body-parser'),
+	app = express(),
+	server = app.listen('3306')
+
+	
+	
+app.io = require('socket.io').listen(server)
 
 
-
-
-var app = express();
-var server = require('http').createServer(app);
-app.io = require('socket.io')(server)
-// app.use(app.router);
-// routes.initialize(app);
 
 var		session = require("express-session")({
 	secret: "i901884384jdowkkd",
@@ -102,6 +101,26 @@ app.use('/matches', matches)
 app.use('/notifs', notifs)
 app.use('/messages', messages)
 
+
+
+var people = {}
+app.io.on('connection', function(socket) {
+	console.log('A New user is connected')
+	socket.on('log', function(users) {
+		connect.query("UPDATE users SET online = 1 WHERE login = ", [users.login], function(err) {
+			if (err) throw err
+			people[users.login] = socket.id
+		})
+	})
+	socket.on('disconnect', function() {
+		console.log('disconnect')
+		connect.query('UPDATE users SET online = 0 WHERE login = ?', [users[people.login]], function(err) {
+			if (err) throw err
+		})
+	})
+})
+global.users = people
+global.io = app.io
 
 
 // catch 404 and forward to error handler

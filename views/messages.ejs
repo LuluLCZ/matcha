@@ -6,7 +6,7 @@
 
 
 
-<div class="ui comments"></div>
+<div class="ui comments">
 <h3 class="ui right floated header">Your discussion with <%=sendto%></h3>
 <br><hr>
 <% message.forEach(function(element) { %>
@@ -23,9 +23,6 @@
 				<div class="text">
 					<%= content %>
 				</div>
-				<div class="actions">
-					<a class="reply">Reply</a>
-				</div>
 			</div>
 		</div>
 	<% } else { %>
@@ -41,17 +38,16 @@
 			</div>
 		</div>
 		<% } %>
-		<hr>
 	<% }) %>
 	<form class="ui reply form">
 		<div class="field">
-			<textarea></textarea>
+			<textarea rows="6" style="resize:none"></textarea>
 		</div>
 		<div class="ui blue labeled submit icon button">
 			<i class="icon edit"></i> Add Reply
 		</div>
 	</form>
-
+</div>
 
 
 
