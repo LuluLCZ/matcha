@@ -37,6 +37,7 @@ router.post('/', function(req, res){
 				req.session.interest = rows[0].interest
 				req.session.gender = rows[0].gender
 				req.session.success = "You are now logged."
+				req.session.log = true
 				req.session.isloggedon = true
 				if (rows[0].sumup)
 					req.session.sumup = rows[0].sumup

@@ -1,18 +1,20 @@
-var	express = require('express'),
-	createError = require('http-errors'),
-	http = require('http'),
-	path = require('path'),
-	cookieParser = require('cookie-parser'),
-	logger = require('morgan'),
-	connect = require('./config/database.js'),
-	bodyParser = require('body-parser'),
-	app = express(),
-	server = app.listen('3306')
+var express = require('express')
+, http = require('http');
+//make sure you keep this order
+var app = express();
+var server = http.createServer(app);
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var connect = require('./config/database.js')
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var socketIOSession = require("socket.io.session");
 
-	
-	
-app.io = require('socket.io').listen(server)
 
+app.io = require('socket.io')(server);
 
 
 var		session = require("express-session")({
@@ -84,6 +86,7 @@ app.use(function(req, res, next) {
 	res.locals.pic4 = req.session.pic4
 	res.locals.pic5 = req.session.pic5
 	res.locals.sumup = req.session.sumup
+	res.locals.log = req.session.log
 	next()
 })
 
@@ -106,18 +109,45 @@ app.use('/messages', messages)
 var people = {}
 app.io.on('connection', function(socket) {
 	console.log('A New user is connected')
+	var me = false
 	socket.on('log', function(users) {
-		connect.query("UPDATE users SET online = 1 WHERE login = ", [users.login], function(err) {
+		console.log('User '+users.login+' is now connected')
+		connect.query('UPDATE users SET online = 1 WHERE login = ?', [users.login], function(err) {
 			if (err) throw err
 			people[users.login] = socket.id
 		})
-	})
-	socket.on('disconnect', function() {
-		console.log('disconnect')
-		connect.query('UPDATE users SET online = 0 WHERE login = ?', [users[people.login]], function(err) {
-			if (err) throw err
+	});
+	socket.on('newmsg', function(message){
+		if (message == '')
+			return false
+		message.user = message.usr
+		date = new Date()
+		message.h = date.getHours()
+		message.m = date.getMinutes()
+		connect.query('INSERT INTO messages SET login = ?, sendat = ?, sendto = ?, content = ?', [message.usr, date, message.recup, message.message], (err) => {
+			var notifmsg = message.usr + ' Vous a envoye un message'
+			connect.query('INSERT INTO notifs SET sent = ?, received = ?, date = ?, content = ?, readed = 0', [message.usr, message.recup, date, notifmsg], (err) => {
+				if (err) console.log(err)
+				socket.send(people[message.usr]).emit('newmsgs', {
+					name: message.usr,
+					message: message.message,
+					h: message.h,
+					m: message.m,
+					recup: message.recup
+				})
+			})
 		})
-	})
+	});
+	socket.on('disconnect', function () {
+		console.log('disconnect')
+		if (!me) {
+			return false
+		}
+		connect.query("UPDATE users SET online = 0 WHERE login = ?", [me], (err) => {
+			if (err) threw (err)
+		})
+		console.log('User '+users.login+' is now disconnected')
+  	});
 })
 global.users = people
 global.io = app.io

@@ -35,15 +35,16 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
 	if (req.session && req.session.login)
 	{
-		var sendto = req.params.id
-		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?)', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
+		var sendto = req.params.id;
+		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
 			if (err) console.log(err)
+			console.log('sendto '+sendto)
 			if (row)
 			{
 				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
 			}
 			else
-				res.redirect('/');
+				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
 		})
 	}
 	else

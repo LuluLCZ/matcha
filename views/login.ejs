@@ -29,9 +29,16 @@
 		</div>
 	</div>
 
-
 	<% include footer %>
 
+	<script>
+		var socket = io.connect();
+	$('#loginform').submit(function(event) {
+		socket.emit('log', {
+			login: $('#login').val()
+		})
+	})
+</script>
 	<script>
 		$('.ui.form')
 		.form({
@@ -65,10 +72,5 @@
 		}
 	});
 
-	var socket = io.connect();
-	$('#logged').submit(function(event) {
-		socket.emit('log', {
-			login : $('#login').val()
-		})
-	})
+
 	</script>
