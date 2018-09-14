@@ -17,33 +17,21 @@
 		<% message.forEach(function(element) { %>
 			<% var content = element["content"] %>
 			<% var name = element["login"] %>
-			<% var date = element["at"] %>
-			<% if (name == sendto) { %>
+			<% var date = element["sendat"] %>
+			<% var testt = element["sendto"] %>
+			<% console.log(date) %>
 				<div class="ui comment">
 					<div class="content">
-						<a class="author"><%=sendto%></a>
+						<a class="author"><%=name%></a>
 						<div class="metadata">
-							<span class="date">lol</span>
+							<span class="date"><%=date.getHours()+':'+date.getMinutes()+' '+date.getDate()+'/'+date.getMonth()%></span>
 						</div>
 						<div class="text">
 							<%= content %>
 						</div>
 					</div>
 				</div>
-			<% } else { %>
-				<div class="comment">
-					<div class="content">
-						<a class="author"><%=me%></a>
-						<div class="metadata">
-							<span class="date">lol</span>
-						</div>
-						<div class="text">
-							<%= content %>
-						</div>
-					</div>
-				</div>
-			<% } %>
-		<% }) %>
+			<% }) %>
 	</div>
 		<form class="ui reply form" id="replymsg">
 				<input type="text" class="message" id="message" maxlength="160" class="text"/>

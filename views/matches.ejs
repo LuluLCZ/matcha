@@ -8,6 +8,12 @@
 		</div>
 	</div>
 <% } else { %>
+	<div class="ui segment">
+			<h2 class="ui left floated header" style="margin-bottom: 2px;">Your wall of fame !</h2>
+			<br>
+			<hr>
+			<br>
+			<div class="ui grid">
 	<% profil.forEach(function(element) { %>
 		<% var fname = element["fname"] %>
 		<% var lname = element["lname"] %>
@@ -16,21 +22,21 @@
 		<% var sumup = element["sumup"] %>
 		<% var login = element["login"] %>
 		<% var pic = element["profpic"] %>
-	<div class="ui people shape">
-			<div class="sides">
-				<div class="side active">
-					<div class="ui card">
-						<div class="image">
-							<% if (pic) { %>
-								<a href="/user_profil/<%=login%>" class="ui medium image">
-									<img src="/images/<%= pic %>">
-								  </a>
+		<div class="ui people shape">
+				<div class="sides">
+					<div class="side active">
+						<div class="ui link card" style="height: 450.16px;">
+							<div class="ui medium image" style="height: 290px; width: 290px;">
+								<% if (pic) { %>
+									<a href="/user_profil/<%=login%>" class="ui image" style="height: 290px; width: 290px;">
+										<img class="ui image" src="/images/<%= pic %>" style="height: -webkit-fill-available; width: -webkit-fill-available;">
+									</a>
 								<% } else { %>
-							<img src="/images/matthew.png">
-							<% } %>
-						</div>
-						<div class="content">
-							<div class="header"><%= fname %> <%= lname %></div>
+									<img src="/images/matthew.png" class="ui image">
+								<% } %>
+							</div>
+							<div class="content">
+								<div class="header"><%= fname %> <%= lname %></div>
 								<div class="meta">
 									<%= gender %>, <%= age %> years old
 								</div>
@@ -52,5 +58,7 @@
 				</div>
 			</div>
 		<% }) %>
+		</div>
 		<% } %>
+	</div>
 		<% include footer %>

@@ -39,11 +39,6 @@ router.get('/:id', function(req, res) {
 		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
 			if (err) console.log(err)
 			console.log('sendto '+sendto)
-			if (row)
-			{
-				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
-			}
-			else
 				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
 		})
 	}

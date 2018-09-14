@@ -1,7 +1,7 @@
 <% include header %>
 
 <div class="ui segment">
-	<h2 class="ui right floated header"><%= login %>'s profil</h2>
+	<h2 class="ui right floated header" style="margin-bottom: 2px;"><%= login %>'s profil</h2>
 	<br>
 	<hr>
 	<br>
@@ -29,7 +29,11 @@
 							<div class ="content">
 								<div class="ui large header" style="color:grey;"><%= locals.fname + ' ' + locals.lname %></div>
 								<div class="meta">
-									<div class="ui teal empty circular label"></div> Online
+									<% if (online == 1) {%>
+										<div class="ui teal empty circular label"></div> Online
+									<% } else { %>
+										<div class="ui red empty circular label"></div> Offline
+									<% } %>
 									<% if (locals.gender == "male") { %>
 										<p>
 											Man, <%= locals.age %>years old
@@ -39,13 +43,6 @@
 											Woman, <%= locals.age %>years old
 										</p>
 									<% } %>
-									<!-- <% if (locals.interest == "male") { %>
-										<p> Interested by: &nbsp; Men <p>
-									<% } else if (locals.interest == "female") { %>
-										<p> Interested by: &nbsp; Women <p>
-									<% } else if (locals.interest == "both") { %>
-										<p> Interested by: &nbsp; Both <p>
-									<% } %> -->
 								</div>
 								<hr class="ui">
 								<div class="description">

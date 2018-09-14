@@ -18,10 +18,10 @@ var express = require('express'),
       router.post('/', function(req, res) {
           //Recuprer toutes les variables de la page d'inscription via le formulaire en post avec
           //le router.post('/'...).
-        var login = req.body.login,
+        var login = req.body.login.toLowerCase(),
             gender = req.body.gender,
-            fname = req.body.fname,
-            lname = req.body.lname,
+            fname = req.body.fname.toLowerCase(),
+            lname = req.body.lname.toLowerCase(),
             pswd = req.body.pswd,
             cpswd = req.body.cpswd,
             email = req.body.email,

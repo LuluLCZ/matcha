@@ -1,7 +1,7 @@
 <% include header %>
 
 <div class="ui segment">
-	<h2 class="ui right floated header">Your profil</h2>
+	<h2 class="ui right floated header" style="margin-bottom: 2px;">Your profil</h2>
 	<br>
 	<hr>
 	<br>
@@ -77,11 +77,11 @@
 				<div class="doubling column row">
 					<div class="column">
 						<div class="ui segment">
-							<form class="ui form segment" method="post" action="/profil/edit_info">
+							<form class="ui form segment" method="post" action="/profil/edit_info" id="names">
 								<div class="two fields">
 									<div class="field">
 										<label>Edit Name</label>
-										<input placeholder="First Name" name="fname" type="text">
+										<input placeholder="First Name" name="fname" type="text" id="fname">
 									<hr class="ui">
 										<div class="ui center" style="display: flex; justify-content: center;">
 											<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -89,7 +89,7 @@
 									</div>
 									<div class="field">
 										<label>Edit last name</label>
-										<input placeholder="Last Name" name="lname" type="text">
+										<input placeholder="Last Name" name="lname" type="text" id="lname">
 									<hr class="ui">
 										<div class="ui center"  style="display: flex; justify-content: center;">
 											<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -147,11 +147,11 @@
 						</div>
 						<div class="column">
 							<div class="ui segment">
-								<form class="ui form segment" method="post" action="/profil/tag_sumup">
+								<form class="ui form segment" method="post" action="/profil/tag_sumup" id="tagup">
 									<div class="two fields">
 										<div class="field">
 											<label>Hobbies or interests</label>
-											<input type="text" name="tag" placeholder="exemple: musculation">
+											<input type="text" name="tag" placeholder="exemple: musculation" id="tag">
 											<hr class="ui">
 											<div class="ui center" style="display: flex; justify-content: center;">
 												<INPUT class="ui green center aligned  button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -159,7 +159,7 @@
 										</div>
 										<div class="field">
 											<label>Update your sumup</label>
-											<input type="text" name="sumup" placeholder="Describe yourself">
+											<input type="text" name="sumup" placeholder="Describe yourself" id="sumup">
 											<hr class="ui">
 											<div class="ui center" style="display: flex; justify-content: center;">
 												<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -170,13 +170,13 @@
 							</div>
 							<div class="column">
 								<div class="ui segment">
-									<form class="ui form segment" method="post" action="/profil/edit_pail">
+									<form class="ui form segment" method="post" action="/profil/edit_pail" id="pswdMailLog">
 										<div class="two fields">
 											<div class="field">
 												<label>Edit your password</label>
-												<input placeholder="Current password" name="cpasswd" type="password">
-												<input placeholder="New password" name="npasswd" type="password">
-												<input placeholder="Confirm new password" name="vnpasswd" type="password">
+												<input placeholder="Current password" name="cpasswd" type="password" id="cpasswd">
+												<input placeholder="New password" name="npasswd" type="password" id="npasswd">
+												<input placeholder="Confirm new password" name="vnpasswd" type="password" id="vnpasswd">
 												<hr class="ui">
 												<div class="ui center" style="display: flex; justify-content: center;">
 													<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -184,7 +184,7 @@
 											</div>
 											<div class="field">
 												<label>Edit your email</label>
-												<input placeholder="New email" name="nmail" type="email">
+												<input placeholder="New email" name="nmail" type="email" id="nmail">
 												<hr class="ui">
 												<div class="ui center"  style="display: flex; justify-content: center;">
 													<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -192,7 +192,7 @@
 											</div>
 											<div class="field">
 												<label>Edit your login</label>
-												<input placeholder="New login" name="nlogin" type="text">
+												<input placeholder="New login" name="nlogin" type="text" id="nlogin">
 												<hr class="ui">
 												<div class="ui center"  style="display: flex; justify-content: center;">
 													<INPUT class="ui green submit button" TYPE="submit" NAME="name" VALUE=" Edit ">
@@ -207,7 +207,7 @@
 				</div>
 			</div>
 			<div class="ui bottom attached tab segment" data-tab="pics">
-				<div class="ui five column grid">
+				<div class="ui five  stackable column grid">
 					<div class="column">
 						<div class="ui fluid card">
 							<div class="ui image">
@@ -339,4 +339,6 @@ $('.tag.example .ui.dropdown')
     allowAdditions: true
   })
 ;
-		</script>
+		
+	
+</script>
