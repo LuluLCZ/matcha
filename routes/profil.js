@@ -58,8 +58,14 @@ router.post('/tag_sumup', function(req, res) {
 	var sumup = req.body.sumup.trim(),
 		tag = req.body.tag.trim()
 
-		console.log(sumup);
-	if (sumup)
+	var RegexSumup = /^([A-Za-z0-9\s\.\,]){10,200}$/gm
+	var RegexTag = /^([A-Za-z0-9]){2,12}$/gm
+	if (sumup && sumup.search(RegexSumup) == -1)
+	{
+		req.session.error = "Your sumup should contain between 10 and 200 characters, and only alphabet letters and numbers including '.' and ','."
+		res.redirect('/profil')
+	}
+	else if (sumup && sumup.search(RegexSumup) != -1)
 	{
 		var queryString = "UPDATE users SET sumup = ? WHERE login = ?";
 		connect.query(queryString, [sumup, req.session.login], function(err) {
@@ -68,7 +74,7 @@ router.post('/tag_sumup', function(req, res) {
 			res.redirect('/profil');
 		})
 	}
-	else if (tag)
+	else if (tag && tag.search(RegexTag) != -1)
 	{
 		var queryStringtag = "INSERT INTO tags(login, tag) VALUES(?, ?)";
 		connect.query(queryStringtag, [req.session.login, tag], function(err) {
@@ -76,6 +82,11 @@ router.post('/tag_sumup', function(req, res) {
 			req.session.success = "Your tag(s) have been added successfully";
 			res.redirect('/profil');
 		})
+	}
+	else if (tag && tag.search(RegexTag) == -1)
+	{
+		req.session.error = "Your tag should contain between 2 and 12 characters, and only alphabet letters and numbers."
+		res.redirect('/profil')
 	}
 	else
 		res.redirect('/profil')
@@ -87,7 +98,8 @@ router.post('/edit_pail', function(req, res) {
 		vnpasswd = req.body.vnpasswd.trim(),
 		nmail = req.body.nmail.trim(),
 		nlogin = req.body.nlogin.trim()
-	console.log(req.body)
+
+	var RegexLogin = /^([A-Za-z0-9]){4,12}$/gm
 	if (cpasswd && npasswd && vnpasswd)
 	{
 		npasswdhash = bcrypt.hashSync(npasswd, saltRound)
@@ -95,16 +107,16 @@ router.post('/edit_pail', function(req, res) {
 		connect.query(queryString, [npasswdhash, req.session.login], function (err) {
 			if (err) throw err
 			req.session.success = "Your passord has been changed successfully"
-			res.redirect('/home')
+			res.redirect('/profil')
 		})
 	}
 	else if (nmail)
 	{
 		connect.query("SELECT * FROM users WHERE email = ?", [nmail], function(err, rows, result) {
-			if (!rows[0] != null)
+			if (rows[0])
 			{
 				req.session.error = "The mail is already taken, please try another one"
-				res.redirect('/home')
+				res.redirect('/profil')
 			}
 			else
 			{
@@ -113,68 +125,76 @@ router.post('/edit_pail', function(req, res) {
 					if (err) throw err
 					req.session.success = "Your email has been changed successfully";
 					req.session.login = nlogin
-					res.redirect('/home')
+					res.redirect('/profil')
 				})
 			}
 		})
 	}
 	else if (nlogin)
 	{
-		connect.query("SELECT * FROM users WHERE login = ?", [nlogin], function(err, rows, result) {
-			if (err) throw err;
-			console.log("REGARDER ICI"+ rows);
-			if (rows[0])
-			{
-				req.session.error = "The login is already taken, please try another one"
-				res.redirect('/home')
-			}
-			else
-			{
-				var queryStringLogin = "UPDATE users SET login = ? WHERE login = ?"
-				connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
-					if (err) throw err
-					
-					var queryStringLogin = "UPDATE tags SET login = ? WHERE login = ?"
+		if (nlogin.search(RegexLogin) == -1)
+		{
+			req.session.error = "Your login should only contain letters and number and must contain between 4 and 12 chars."
+			res.redirect('/profil');
+		}
+		else
+		{
+			connect.query("SELECT * FROM users WHERE login = ?", [nlogin], function(err, rows, result) {
+				if (err) throw err;
+				console.log("REGARDER ICI"+ rows);
+				if (rows[0])
+				{
+					req.session.error = "The login is already taken, please try another one"
+					res.redirect('/profil')
+				}
+				else
+				{
+					var queryStringLogin = "UPDATE users SET login = ? WHERE login = ?"
 					connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 						if (err) throw err
 						
-						var queryStringLogin = "UPDATE notifs SET sent = ? WHERE sent = ?"
+						var queryStringLogin = "UPDATE tags SET login = ? WHERE login = ?"
 						connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 							if (err) throw err
-							var queryStringLogin = "UPDATE notifs SET received = ? WHERE received = ?"
+							
+							var queryStringLogin = "UPDATE notifs SET sent = ? WHERE sent = ?"
 							connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 								if (err) throw err
-
-								var queryStringLogin = "UPDATE messages SET login = ? WHERE login = ?"
+								var queryStringLogin = "UPDATE notifs SET received = ? WHERE received = ?"
 								connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 									if (err) throw err
-									var queryStringLogin = "UPDATE messages SET sendto = ? WHERE sendto = ?"
+
+									var queryStringLogin = "UPDATE messages SET login = ? WHERE login = ?"
 									connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 										if (err) throw err
-
-										var queryStringLogin = "UPDATE matching SET flogin = ? WHERE flogin = ?"
+										var queryStringLogin = "UPDATE messages SET sendto = ? WHERE sendto = ?"
 										connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 											if (err) throw err
-											var queryStringLogin = "UPDATE matching SET slogin = ? WHERE slogin = ?"
+
+											var queryStringLogin = "UPDATE matching SET flogin = ? WHERE flogin = ?"
 											connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 												if (err) throw err
-												
-												var queryStringLogin = "UPDATE likes SET liker = ? WHERE liker = ?"
+												var queryStringLogin = "UPDATE matching SET slogin = ? WHERE slogin = ?"
 												connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 													if (err) throw err
-													var queryStringLogin = "UPDATE likes SET liked = ? WHERE liked = ?"
+													
+													var queryStringLogin = "UPDATE likes SET liker = ? WHERE liker = ?"
 													connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 														if (err) throw err
-				
-														var queryStringLogin = "UPDATE block SET blocked = ? WHERE blocked = ?"
+														var queryStringLogin = "UPDATE likes SET liked = ? WHERE liked = ?"
 														connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 															if (err) throw err
-															var queryStringLogin = "UPDATE block SET login = ? WHERE login = ?"
+					
+															var queryStringLogin = "UPDATE block SET blocked = ? WHERE blocked = ?"
 															connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
 																if (err) throw err
-																req.session.success = "Your login has been changed successfully";
-																req.session.login = nlogin
-																res.redirect('/home')
+																var queryStringLogin = "UPDATE block SET login = ? WHERE login = ?"
+																connect.query(queryStringLogin, [nlogin, req.session.login], function(err) {
+																	if (err) throw err
+																	req.session.success = "Your login has been changed successfully";
+																	req.session.login = nlogin
+																	res.redirect('/home')
+																})
 															})
 														})
 													})
@@ -186,9 +206,9 @@ router.post('/edit_pail', function(req, res) {
 							})
 						})
 					})
-				})
-			}
-		})
+				}
+			})
+		}
 	}
 	else
 		res.redirect('/profil')
@@ -253,7 +273,7 @@ router.post('/upload_pic/:id', function(req, res) {
 				{
 					console.log(err)
 					req.session.error = "An error occured.";
-					res.redirect('/home');
+					res.redirect('/profil');
 				}
 				if (req.params.id == 1)
 				{

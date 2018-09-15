@@ -75,7 +75,10 @@ router.get('/:id', function(req, res, next) {
 												var visit = "Your profile has been visited by "+req.session.login+" ! Take a look back, we never know.. !"
 												connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, visit, 0, new Date()], function(err) {
 													if (err) throw err
-													res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+													connect.query("UPDATE users SET popu = popu + 5 WHERE login = ?", [login], function(err) {
+														if (err) throw err
+														res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+													})
 												})
 											}
 										})
@@ -124,7 +127,10 @@ router.get('/block/:id', function(req, res, next) {
 								connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
 									if (err) throw err
 									req.session.success = "This user has been blocked successfully ! He won't arm you anymore"
-									res.redirect("/home")
+									connect.query("UPDATE users SET popu = popu - 10 WHERE login = ?", [login], function(err) {
+										if (err) throw err
+										res.redirect("/home")
+									})
 								})
 							}
 						})
@@ -157,7 +163,10 @@ router.get('/unblock/:id', function(req, res, next) {
 						connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
 							if (err) throw err
 							req.session.success = "This user has been unblocked successfully !"
-							res.redirect("/home")
+							connect.query("UPDATE users SET popu = popu + 10 WHERE login = ?", [login], function(err) {
+								if (err) throw err
+								res.redirect("/home")
+							})
 						})
 					}
 					else
@@ -180,48 +189,65 @@ router.get('/like/:id', function(req, res, next) {
 			var login = req.params.id
 			if (login)
 			{
-				connect.query("SELECT * FROM likes WHERE liked = ? AND liker = ?", [login, req.session.login], function(rows, err, result) {
-					if (err) console.log(err)
-					console.log("eh merce "+rows)
-					if (!rows)
+				connect.query("SELECT * FROM blocked WHERE blocked = ? AND login = ?", [req.session.login, login], function(rows, err) {
+					if (err) throw err
+					if (!rows[0])
 					{
-                        connect.query("INSERT INTO likes SET liker = ?, liked = ?", [req.session.login , login], function(err, result) {
-						if (err) console.log(err)
-						connect.query("SELECT * FROM likes WHERE liker = ? AND liked = ?", [login, req.session.login], function(err, rows2, result2) {
-							if (err) throw err
-							console.log("PROBLEME "+rows2[0])
-							if (rows2[0] != undefined)
+						connect.query("SELECT * FROM likes WHERE liked = ? AND liker = ?", [login, req.session.login], function(rows, err, result) {
+							if (err) console.log(err)
+							console.log("eh merce "+rows)
+							if (!rows)
 							{
-								connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [req.session.login, login], function(err, rows3, result3) {
-									if (err) throw err
-									connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [login, req.session.login], function(err, rows4, result4) {
+								connect.query("INSERT INTO likes SET liker = ?, liked = ?", [req.session.login , login], function(err, result) {
+									if (err) console.log(err)
+									connect.query("UPDATE users SET popu = popu + 10 WHERE login = ?", [login], function(err) {
 										if (err) throw err
-										req.session.success = "Congratulation, you just matched ! Send a message to say how you're happy about it !"
-										res.redirect("/home")
+										connect.query("SELECT * FROM likes WHERE liker = ? AND liked = ?", [login, req.session.login], function(err, rows2, result2) {
+											if (err) throw err
+											console.log("PROBLEME "+rows2[0])
+											if (rows2[0] != undefined)
+											{
+												connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [req.session.login, login], function(err, rows3, result3) {
+													if (err) throw err
+													connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [login, req.session.login], function(err, rows4, result4) {
+														if (err) throw err
+														connect.query("UPDATE users SET popu = popu + 25 WHERE login = ?", [login], function(err) {
+															if (err) throw err
+															req.session.success = "Congratulation, you just matched ! Send a message to say how you're happy about it !"
+															res.redirect("/home")
+														})
+													})
+												})
+											}
+											else
+											{
+												var blocked = "The user "+req.session.login+" seems to like you ! That's something.."
+												connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
+													if (err) throw err
+													req.session.success = "This user has been notified that you like this profil !"
+													res.redirect("/home")
+												})
+											}
+										})
 									})
 								})
 							}
-							else
-							{
-								var blocked = "The user "+req.session.login+" seems to like you ! That's something.."
-								connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
-									if (err) throw err
-									req.session.success = "This user has been notified that you like this profil !"
-									res.redirect("/home")
-								})
-							}
 						})
-					})
-				}
-				else
-				{
-					req.session.error = "This user is already blocked"
-					res.redirect('/home')
-				}
-			})
+					}
+					else
+					{
+						req.session.info = "This user blocked you, you can't like his profil"
+						res.redirect('/home');
+					}
+				})
+			}
+			else
+			{
+				req.session.error = "An error occured"
+				res.redirect('/home')
+			}
 		}
 	}
-}
 })
 
 router.get('/unlike/:id', function(req, res, next) {
@@ -242,8 +268,11 @@ router.get('/unlike/:id', function(req, res, next) {
 							var blocked = "Did you do something bad.. ? The user "+req.session.login+" unliked you ! That's something.."
 							connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
 								if (err) throw err
-								req.session.success = "This user has been unliked successfully !"
-								res.redirect("/home")
+								connect.query("UPDATE users SET popu = popu - 10 WHERE login = ?", [login], function(err) {
+									if (err) throw err
+									req.session.success = "This user has been unliked successfully !"
+									res.redirect("/home")
+								})
 							})
 						})
 					})
