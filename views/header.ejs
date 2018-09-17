@@ -46,6 +46,12 @@
 								<i class="search link icon"></i>
 							</div>
 						</div>
+						<a href="/notif" class="item">
+							<i class="world icon" id='testt'></i>
+							<% if (locals && locals.login) { %>
+								<div class="floating ui red label" style="top:10px;">!</div>
+							<% } %>
+						</a>
 						<a class="ui item" href="/logout" id="logout">
 							Logout
 						</a>
