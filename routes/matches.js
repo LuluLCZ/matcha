@@ -19,7 +19,6 @@ router.get('/', function(req, res) {
 				var slogin = row.slogin
 				connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic FROM users INNER JOIN matching ON login = slogin WHERE flogin = ?', [login], function(err, rows) {
 					if (err) console.log(err)
-					console.log(result)
 					var profil = rows
 					res.render('matches', { title: 'Matches', profil: profil })
 				})

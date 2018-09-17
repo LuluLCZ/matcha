@@ -20,7 +20,6 @@ router.get('/', function(req, res) {
 					slogin = rows.sent
 					connect.query('SELECT login, profpic, content, date FROM users INNER JOIN notifs ON login = sent WHERE received = ? ORDER BY notifs.id DESC', [login], function(err, rows2) {
 						if (err) console.log(err)
-						console.log(rows2)
 						var profil = rows2
 						connect.query("UPDATE notifs SET readed = ? WHERE received = ?", [1, req.session.login], function(err) {
 							if (err) throw err

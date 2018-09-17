@@ -1,5 +1,27 @@
 <% include header %>
 
+<div class="ui segment">
+	<div class="ui floating labeled icon dropdown button">
+		<i class="filter icon"></i>
+		<span class="text">Filter</span>
+		<div class="menu">
+		  <div class="header">
+			<i class="tags icon"></i>
+			Filter by <%= filter %>
+		  </div>
+		  <a class="item" href="/home/popularity"><div class="item">
+			Popularity
+		  </div></a>
+		  <a class="item" href="/home"><div class="item">
+			New user
+		  </div></a>
+		  <div class="item">
+			Discussion
+		  </div>
+		</div>
+	  </div>
+</div>
+
 <% if (profil == undefined) { %>
 	<div class="ui negative message">
 		<i class="close icon"></i>

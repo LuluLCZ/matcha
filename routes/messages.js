@@ -19,7 +19,6 @@ router.get('/', function(req, res) {
 				var slogin = row.slogin
 				connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic FROM users INNER JOIN matching ON login = slogin WHERE flogin = ?', [login], function(err, rows) {
 					if (err) console.log(err)
-					console.log(result)
 					var profil = rows
 					res.render('messages', { title: 'Messages', profil: profil })
 				})
@@ -38,7 +37,6 @@ router.get('/:id', function(req, res) {
 		var sendto = req.params.id;
 		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
 			if (err) console.log(err)
-			console.log('sendto '+sendto)
 				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
 		})
 	}

@@ -128,16 +128,29 @@ app.io.on('connection', function(socket) {
 			var notifmsg = message.usr + ' Vous a envoye un message'
 			connect.query('INSERT INTO notifs SET sent = ?, received = ?, date = ?, content = ?, readed = 0', [message.usr, message.recup, date, notifmsg], (err) => {
 				if (err) console.log(err)
-				socket.send(people[message.usr]).emit('newmsgs', {
+				socket.broadcast.to(people[message.recup]).emit('newmsgs', {
 					name: message.usr,
 					message: message.message,
 					h: message.h,
 					m: message.m,
 					recup: message.recup
 				})
+				socket.send(people[message.recup]).emit('newmsgs', {
+					name: message.usr,
+					message: message.message,
+					h: message.h,
+					m: message.m,
+					recup: message.recup
+				})
+				
 			})
 		})
 	});
+	socket.on('notif', function(data) {
+		console.log("fijweoifjweoifjweofjewjfoewjf")
+		console.log("Bonjour "+data);
+		alert("visit");
+	})
 	socket.on('disconnect', function () {
 		console.log('disconnect')
 		if (!me) {
@@ -149,7 +162,7 @@ app.io.on('connection', function(socket) {
 		console.log('User '+users.login+' is now disconnected')
   	});
 })
-global.users = people
+global.people = people
 global.io = app.io
 
 
