@@ -22,7 +22,7 @@
 					<img class="ui avatar image" src="/images/<%=pic%>">
 					<div class="content">
 						<a class="header" href="/user_profil/<%=login%>"><%= login %></a>
-						<div class="description"><%=content%> <%= date %></div>
+						<div class="description"><%=content%> <%=date.getHours()+':'+date.getMinutes()+' '+date.getDate()+'/'+date.getMonth()%></div>
 					</div>
 				</div>
 			</div>

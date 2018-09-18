@@ -22,6 +22,7 @@
 		<% var sumup = element["sumup"] %>
 		<% var login = element["login"] %>
 		<% var pic = element["profpic"] %>
+		<% var online = element['online'] %>
 		<div class="ui people shape">
 				<div class="sides">
 					<div class="side active">
@@ -41,16 +42,22 @@
 									<%= gender %>, <%= age %> years old
 								</div>
 								<div class="description">
-									<%= sumup %>
+										<% if (sumup) {%>
+											<%= sumup.substr(0, 20) %>...
+											<% } else { %>
+											<%= sumup %>
+											<% } %>
 								</div>
 							</div>
 							<div class="extra content">
 								<button  onclick="window.location.href='/messages/<%=login%>'" class="ui icon button right floated">
 									<i class="chat icon"></i>
 								</button>
-								<span class="left floated">
-								Joined in 2017
-								</span>
+								<% if (online == 1) {%>
+									<div class="ui teal empty circular label"></div> Online
+								<% } else { %>
+									<div class="ui red empty circular label"></div> Offline
+								<% } %>
 								<span>
 							</div>
 						</div>

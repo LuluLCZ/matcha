@@ -52,9 +52,10 @@
 									<div class="ui segment">
 										<p><% if (tagReq) { %>
 											<% tagReq.forEach(function(element) { %>
-											<% var tagReq = element['tagReq'] %>
+												<% console.log(element) %>
+											<% var tags = element['tag'] %>
 											<a class="ui label">
-													<%= element["tagReq"] %>
+													<%= tags %>
 												</a>
 											<% }) %>
 										<% } %>

@@ -79,13 +79,13 @@ router.get('/:id', function(req, res, next) {
 													{
 														connect.query("UPDATE users SET popu = popu + 5 WHERE login = ?", [login], function(err) {
 															if (err) throw err
-															res.io.to(global.people[login]).emit('notif')
+															res.io.send(global.people[login]).emit('notif')
 															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
 														})
 													}
 													else
 													{
-														res.io.to(global.people[login]).emit('notif')
+														res.io.send(global.people[login]).emit('notif')
 														res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
 													}
 												})
@@ -142,6 +142,7 @@ router.get('/block/:id', function(req, res, next) {
 									req.session.success = "This user has been blocked successfully ! He won't arm you anymore"
 									connect.query("UPDATE users SET popu = popu - 10 WHERE login = ?", [login], function(err) {
 										if (err) throw err
+										res.io.send(global.people[login]).emit('notif')
 										res.redirect("/home")
 									})
 								})
@@ -178,6 +179,7 @@ router.get('/unblock/:id', function(req, res, next) {
 							req.session.success = "This user has been unblocked successfully !"
 							connect.query("UPDATE users SET popu = popu + 10 WHERE login = ?", [login], function(err) {
 								if (err) throw err
+								res.io.send(global.people[login]).emit('notif')
 								res.redirect("/home")
 							})
 						})
@@ -227,6 +229,7 @@ router.get('/like/:id', function(req, res, next) {
 														connect.query("UPDATE users SET popu = popu + 25 WHERE login = ?", [login], function(err) {
 															if (err) throw err
 															req.session.success = "Congratulation, you just matched ! Send a message to say how you're happy about it !"
+															res.io.send(global.people[login]).emit('notif')
 															res.redirect("/home")
 														})
 													})
@@ -238,6 +241,7 @@ router.get('/like/:id', function(req, res, next) {
 												connect.query("INSERT INTO notifs SET sent = ?, received = ?, content = ?, readed = ?, date = ?", [req.session.login, login, blocked, 0, new Date()], function(err) {
 													if (err) throw err
 													req.session.success = "This user has been notified that you like this profil !"
+													res.io.send(global.people[login]).emit('notif')
 													res.redirect("/home")
 												})
 											}
@@ -284,6 +288,7 @@ router.get('/unlike/:id', function(req, res, next) {
 								connect.query("UPDATE users SET popu = popu - 10 WHERE login = ?", [login], function(err) {
 									if (err) throw err
 									req.session.success = "This user has been unliked successfully !"
+									res.io.send(global.people[login]).emit('notif')
 									res.redirect("/home")
 								})
 							})

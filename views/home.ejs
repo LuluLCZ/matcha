@@ -15,9 +15,9 @@
 		  <a class="item" href="/home"><div class="item">
 			New user
 		  </div></a>
-		  <div class="item">
-			Discussion
-		  </div>
+		  <a class="item" href="/home/age"><div class="item">
+			Age
+		  </div></a>
 		</div>
 	  </div>
 </div>
@@ -44,10 +44,11 @@
 					<% var sumup = element["sumup"] %>
 					<% var login = element["login"] %>
 					<% var pic = element["profpic"] %>
+					<% var online = element['online'] %>
 					<div class="ui people shape">
 						<div class="sides">
 							<div class="side active">
-								<div class="ui link card" style="height: 415.16px;">
+								<div class="ui link card" style="height: 415.16px; margin-bottom:5px">
 									<div class="ui medium image" style="height: 290px; width: 290px;">
 										<% if (pic) { %>
 											<a href="/user_profil/<%=login%>" class="ui image" style="height: 290px; width: 290px;">
@@ -63,10 +64,21 @@
 											<%= gender %>, <%= age %> years old
 										</div>
 										<div class="description">
+											<% if (sumup) {%>
+											<%= sumup.substr(0, 20) %>...
+											<% } else { %>
 											<%= sumup %>
+											<% } %>
 										</div>
 									</div>
 									<div class="extra content">
+										<span class="left floated">
+												<% if (online == 1) {%>
+													<div class="ui teal empty circular label"></div> Online
+												<% } else { %>
+													<div class="ui red empty circular label"></div> Offline
+												<% } %>
+										</span>
 										<span class="right floated">
 										Joined in 2017
 										</span>

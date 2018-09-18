@@ -128,27 +128,15 @@ app.io.on('connection', function(socket) {
 			var notifmsg = message.usr + ' Vous a envoye un message'
 			connect.query('INSERT INTO notifs SET sent = ?, received = ?, date = ?, content = ?, readed = 0', [message.usr, message.recup, date, notifmsg], (err) => {
 				if (err) console.log(err)
-				socket.send(people[message.recup]).emit('newmsgs', {
+				console.log(people);
+				io.send(people[message.recup]).emit('newmsgs', {
 					name: message.usr,
 					message: message.message,
 					h: message.h,
 					m: message.m,
 					recup: message.recup
 				})
-				io.to(people[message.recup]).emit('newmsgs', {
-					name: message.usr,
-					message: message.message,
-					h: message.h,
-					m: message.m,
-					recup: message.recup
-				})
-				io.to(people[message.usr]).emit('newmsgs', {
-					name: message.usr,
-					message: message.message,
-					h: message.h,
-					m: message.m,
-					recup: message.recup
-				})
+				
 			})
 		})
 	});

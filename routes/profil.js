@@ -58,11 +58,11 @@ router.post('/tag_sumup', function(req, res) {
 	var sumup = req.body.sumup.trim(),
 		tag = req.body.tag.trim()
 
-	var RegexSumup = /^([A-Za-z0-9\s\.\,]){10,200}$/gm
+	var RegexSumup = /^([A-Za-z0-9\s\.\,]){10,350}$/gm
 	var RegexTag = /^([A-Za-z0-9]){2,12}$/gm
 	if (sumup && sumup.search(RegexSumup) == -1)
 	{
-		req.session.error = "Your sumup should contain between 10 and 200 characters, and only alphabet letters and numbers including '.' and ','."
+		req.session.error = "Your sumup should contain between 10 and 350 characters, and only alphabet letters and numbers including '.' and ','."
 		res.redirect('/profil')
 	}
 	else if (sumup && sumup.search(RegexSumup) != -1)

@@ -33,7 +33,7 @@ router.post('/', function(req, res){
 				req.session.lname = rows[0].lname
 				req.session.email = rows[0].email
 				req.session.city = rows[0].city
-				req.session.age = 18
+				req.session.age = rows[0].age
 				req.session.interest = rows[0].interest
 				req.session.gender = rows[0].gender
 				req.session.success = "You are now logged."
