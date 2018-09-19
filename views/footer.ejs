@@ -30,7 +30,10 @@
 			</script>
 		<% } else  { %>
 			<script>
-				var socket = io()
+				var socket = io.connect()
+				socket.emit('connectionne', {login: '<%- locals.login %>'})
+				// console.log("1+"+socket.id)
+				// console.log("2+"+people['lucien'])
 				var parse = '<%- locals.login %>'
 				socket.emit('parse', {
 					login	: parse

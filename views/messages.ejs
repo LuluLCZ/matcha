@@ -35,11 +35,12 @@
 <% include footer %>
 
 <script>
-	var socket = io("http://localhost:3306/");
 	$('#replymsg').submit(function(event) {
 		event.preventDefault()
 		console.log('========')
-		socket.emit('newmsg', {message: $('#message').val(), recup: $('#recup').val(), usr: $('#usr').val() })
+		socket.emit('newmsg', {message: $('#message').val(), recup: $('#recup').val(), usr: $('#usr').val(), id: socket.id })
+		$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+$('#usr').val()+'</a><div class="metadata"><span class="date"></span></div><div class="text">'+$('#message').val()+'</div></div></div>');
+		$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
 		$('#message').val('')
 		$('#message').focus()
 	})
@@ -48,6 +49,8 @@
 	 		console.log(message.message)
 			$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+message.name+'</a><div class="metadata"><span class="date">'+message.h+':'+message.m+'</span></div><div class="text">'+message.message+'</div></div></div>');
 			$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
-	 }))
+	}))
+
+	
 
 </script>

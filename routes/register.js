@@ -6,6 +6,7 @@ var express = require('express'),
     ageCalc = require('age-calculator'),
     parse = require('parse').parse,
     bcrypt = require('bcrypt'),
+    nodemailer = require('nodemailer'),
     router = express.Router()
 
 var {AgeFromDateString, AgeFromDate} = require('age-calculator')
@@ -39,8 +40,36 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
                     console.log("Everythng's good");
                     if (!rows[0])
                     {
-                        connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?", [login, gender, fname, lname, passwdhash, email, city, age, interest], function(err, result) {
+                        tohash = "alaiseblaise"+Math.floor(Math.random() * Math.floor(555))
+                        var hashh = bcrypt.hashSync(tohash, saltRound);
+                        var hash = "";
+                        hash = hashh.replace(/\//g , hash);
+                        console.log(hash)
+                        connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?, hash = ?", [login, gender, fname, lname, passwdhash, email, city, age, interest, hash], function(err, result) {
                             if (err) throw err;
+                            var transporter = nodemailer.createTransport({
+                                service: 'gmail',
+                                auth: {
+                                  user: 'matchabylacaze@gmail.com',
+                                  pass: 'Poutrelle123'
+                                }
+                              });
+                              
+                              var mailOptions = {
+                                from: 'matchabylacaze@gmail.com',
+                                to: email,
+                                subject: 'Welcome to Matcha !',
+                                text: 'Your confirmation link is : '+'http://localhost:3306/confirm/'+hash
+                              };
+                              
+                              transporter.sendMail(mailOptions, function(error, info){
+                                if (error) {
+                                  console.log(error);
+                                } else {
+                                  console.log('Email sent: ' + info.response);
+                                }
+                              });
+                              req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
                             res.redirect("/login");
                         })
                     }

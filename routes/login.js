@@ -1,7 +1,9 @@
 var express = require('express'),
+iplocation = require('iplocation'),
 connect = require('../config/database.js'),
 session = require('express-session'),
 bcrypt = require('bcrypt'),
+requestIp = require('request-ip'),
 router = express.Router()
 
 const saltRound = 10;
@@ -52,7 +54,6 @@ router.post('/', function(req, res){
 				if (rows[0].pic5)
 					req.session.pic5 = rows[0].pic5
 				res.redirect('/home');
-				console.log('ofddfsdfsdfdsfsdfefdfdsfsdfsk');
 			}
 			else
 			{

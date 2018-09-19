@@ -12,9 +12,10 @@ var connect = require('./config/database.js')
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var socketIOSession = require("socket.io.session");
+var requestIp = require('request-ip');
 
-
-app.io = require('socket.io')(server);
+app.io = require('socket.io')(server, {pingInterval: 10000,
+	pingTimeout: 50000,});
 
 
 var		session = require("express-session")({
@@ -32,7 +33,8 @@ var		index = require('./routes/index'),
 		user_profil = require('./routes/user_profil'),
 		matches = require('./routes/matches'),
 		notifs = require('./routes/notifs'),
-		messages = require('./routes/messages')
+		messages = require('./routes/messages'),
+		confirm = require('./routes/confirm')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -45,6 +47,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session)
+app.use(requestIp.mw())
 
 app.use(function (req, res, next) {
 	if (req.session) {
@@ -103,6 +106,7 @@ app.use('/user_profil', user_profil)
 app.use('/matches', matches)
 app.use('/notifs', notifs)
 app.use('/messages', messages)
+app.use('/confirm', confirm)
 
 
 
@@ -111,6 +115,13 @@ app.io.on('connection', function(socket) {
 	console.log('A New user is connected')
 	var me = false
 	socket.on('log', function(users) {
+		console.log('User '+users.login+' is now connected')
+		connect.query('UPDATE users SET online = 1 WHERE login = ?', [users.login], function(err) {
+			if (err) throw err
+			people[users.login] = socket.id
+		})
+	});
+	socket.on('connectionne', function(users) {
 		console.log('User '+users.login+' is now connected')
 		connect.query('UPDATE users SET online = 1 WHERE login = ?', [users.login], function(err) {
 			if (err) throw err
@@ -128,15 +139,13 @@ app.io.on('connection', function(socket) {
 			var notifmsg = message.usr + ' Vous a envoye un message'
 			connect.query('INSERT INTO notifs SET sent = ?, received = ?, date = ?, content = ?, readed = 0', [message.usr, message.recup, date, notifmsg], (err) => {
 				if (err) console.log(err)
-				console.log(people);
-				io.send(people[message.recup]).emit('newmsgs', {
+				io.to(people[message.recup]).emit('newmsgs', {
 					name: message.usr,
 					message: message.message,
 					h: message.h,
 					m: message.m,
 					recup: message.recup
 				})
-				
 			})
 		})
 	});

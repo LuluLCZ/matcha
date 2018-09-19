@@ -79,13 +79,13 @@ router.get('/:id', function(req, res, next) {
 													{
 														connect.query("UPDATE users SET popu = popu + 5 WHERE login = ?", [login], function(err) {
 															if (err) throw err
-															res.io.send(global.people[login]).emit('notif')
+															res.io.to(global.people[login]).emit('notif')
 															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
 														})
 													}
 													else
 													{
-														res.io.send(global.people[login]).emit('notif')
+														res.io.to(global.people[login]).emit('notif')
 														res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
 													}
 												})
