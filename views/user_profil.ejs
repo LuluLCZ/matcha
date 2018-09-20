@@ -83,6 +83,21 @@
 											</a>
 											<br />
 										<% } %>
+										<a class="item" style="text-decoration: none;" id="reportfake">
+											<i class="user secret icon"></i>Report as fake
+										</a>
+									</div>
+									<div class="show-onclick ui form example" style="display: none">
+										<form class="ui form segment" id="fakeform" method="post" action="/fake/<%=login%>">
+											<div class="field">
+												<label>Why would you report <%=login%> as fake ?</label>
+												<input placeholder="reason" name="reason" type="text" id="reason" required;>
+											</div>
+											<div class="ui center">
+												<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Report <%=login%> as fake ">
+											</div>
+											<div class="ui error message"></div>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -166,4 +181,29 @@ $('.tag.example .ui.dropdown')
     allowAdditions: true
   })
 ;
+
+$(document).ready(function() {
+    $('#reportfake').click(function() {
+        $('.show-onclick').show();
+    });
+});
+
+$('.ui.form')
+		.form({
+		fields: {
+			reason: {
+				identifier: 'reason',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter a reason'
+				  },
+				  {
+					type   : 'minLength[25]',
+					prompt : 'You should be capable to explain in 25 letters why this user is a fake.'
+				  }
+				]
+			}
+		}
+	});
 		</script>

@@ -34,11 +34,19 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
 	if (req.session && req.session.login)
 	{
-		var sendto = req.params.id;
-		connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
-			if (err) console.log(err)
-				res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
-		})
+		if (req.session.profpic)
+		{
+			var sendto = req.params.id;
+			connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
+				if (err) console.log(err)
+					res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
+			})
+		}
+		else
+		{
+			req.session.error = "You have to choose a profil picture before anything else."
+			res.redirect('/profil');
+		}
 	}
 	else
 		res.redirect('/');

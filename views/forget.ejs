@@ -1,0 +1,28 @@
+<% include header %>
+
+<div id="wrapper">
+	
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+	<div class="container-fluid">
+	
+	<!-- FORM -->
+	<div class="ui raised very padded text container segment">
+		<h4>You will recover your password soon, no worries !</h4>
+		<hr>
+		<div class="field example">
+			<!-- <img src="images/matcha1.png" class="logoform"> -->
+			<form class="ui form segment" id="forget" method="post" action="/forget">
+					<div class="field">
+						<label>Email</label>
+						<input placeholder="Email" name="email" type="email" id="email">
+					</div>
+				<div class="ui center">
+					<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Receive a mail to change your password ">
+				</div>
+				<div class="ui error message"></div>
+			</form>
+		</div>
+	</div>
+
+	<% include footer %>

@@ -1,0 +1,59 @@
+<% include header %>
+
+<div class="ui segment">
+		<h2 class="ui right floated header" style="margin-bottom: 2px;"><%= login %>'s profil</h2>
+		<br>
+		<hr>
+		<br>
+		<div class="ui grid">
+			<div class="ui form">
+				<!-- BY LOGIN -->
+				<form class="ui form segment" id="loginsearch" method="get" action="/search/login">
+					<div class="field">
+						<label>Login</label>
+						<input placeholder="Login" name="login" type="text" id="login">
+					</div>
+					<div class="ui center">
+						<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Let's match ">
+					</div>
+					<div class="ui error message"></div>
+				</form>
+				<!-- BY TAG -->
+				<form class="ui form segment" id="tagsearch" method="get" action="/search/tag">
+					<div class="field">
+						<label>Tag</label>
+						<input placeholder="tag" name="tag" type="text" id="tag">
+					</div>
+					<div class="ui center">
+						<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Let's match ">
+					</div>
+					<div class="ui error message"></div>
+				</form>
+				<!-- BY AGE -->
+				<form class="ui form segment" id="agesearch" method="get" action="/search/age">
+					<div class="field">
+						<label>Minimum age:</label>
+						<input placeholder="Age minimum" name="age" type="number" id="age">
+					</div>
+					<div class="ui center">
+						<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Let's match ">
+					</div>
+					<div class="ui error message"></div>
+				</form>
+				<!-- BY CITY -->
+				<form class="ui form segment" id="citysearch" method="get" action="/search/city">
+					<div class="field">
+						<label>City</label>
+						<input placeholder="City" name="city" type="text" id="city">
+					</div>
+					<div class="ui center">
+						<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Let's match ">
+					</div>
+					<div class="ui error message"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<% include footer %>

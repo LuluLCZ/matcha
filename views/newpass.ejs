@@ -1,0 +1,68 @@
+<% include header %>
+
+<div id="wrapper">
+	
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+	<div class="container-fluid">
+	
+	<!-- FORM -->
+	<div class="ui raised very padded text container segment">
+		<h4>Change your password !</h4>
+		<hr>
+		<div class="field example">
+			<form class="ui form segment" id="newpass" method="post" action="/reset">
+					<div class="field">
+						<label>Password</label>
+						<input placeholder="Password" name="pswd" type="password" id="pswd">
+					</div>
+					<div class="field">
+						<label>Confirm password</label>
+						<input placeholder="Confirm password" name="cpswd" type="password" id="cpswd">
+					</div>
+				<div class="ui center">
+					<input type="hidden" id="login" name="login" value="<%=login %>" class="text"/>
+					<INPUT class="fluid ui green submit button" TYPE="submit" NAME="nom" VALUE=" Change it ! ">
+				</div>
+				<div class="ui error message"></div>
+			</form>
+		</div>
+	</div>
+
+	<% include footer %>
+
+	<script>
+		$('.ui.form')
+		.form({
+		fields: {
+			pswd: {
+				identifier: 'pswd',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please enter your password'
+				  },
+				  {
+					type   : 'minLength[8]',
+					prompt : 'Your password shhould contain at least 8 char'
+				  }
+				]
+			},
+			cpswd: {
+				identifier: 'cpswd',
+				rules: [
+				  {
+					type   : 'empty',
+					prompt : 'Please confirm your password'
+				  },
+				  {
+					type   : 'match[pswd]',
+					prompt : 'Passwords should be matching'
+				  }
+				]
+			},
+		}
+	});
+
+
+	</script>

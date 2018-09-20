@@ -34,7 +34,11 @@ var		index = require('./routes/index'),
 		matches = require('./routes/matches'),
 		notifs = require('./routes/notifs'),
 		messages = require('./routes/messages'),
-		confirm = require('./routes/confirm')
+		confirm = require('./routes/confirm'),
+		forget = require('./routes/forget'),
+		newpass = require('./routes/newpass'),
+		fake = require('./routes/fake'),
+		search = require('./routes/search')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -107,8 +111,10 @@ app.use('/matches', matches)
 app.use('/notifs', notifs)
 app.use('/messages', messages)
 app.use('/confirm', confirm)
-
-
+app.use('/forget', forget)
+app.use('/reset', newpass)
+app.use('/fake', fake)
+app.use('/search', search)
 
 var people = {}
 app.io.on('connection', function(socket) {
