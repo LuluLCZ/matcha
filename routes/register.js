@@ -44,7 +44,7 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
                         var hashh = bcrypt.hashSync(tohash, saltRound);
                         var hash = "";
                         hash = hashh.replace(/\//g , hash);
-                        console.log(hash)
+                        
                         connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?, hash = ?", [login, gender, fname, lname, passwdhash, email, city, age, interest, hash], function(err, result) {
                             if (err) throw err;
                             var transporter = nodemailer.createTransport({
@@ -69,8 +69,8 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
                                   console.log('Email sent: ' + info.response);
                                 }
                               });
-                              req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
-                            res.redirect("/login");
+                                req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                res.redirect("/login");
                         })
                     }
                     else

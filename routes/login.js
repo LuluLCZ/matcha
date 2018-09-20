@@ -1,5 +1,6 @@
 var express = require('express'),
 iplocation = require('iplocation'),
+geolocation = require('geolocation'),
 connect = require('../config/database.js'),
 session = require('express-session'),
 bcrypt = require('bcrypt'),
@@ -53,6 +54,9 @@ router.post('/', function(req, res){
 					req.session.pic4 = rows[0].pic4
 				if (rows[0].pic5)
 					req.session.pic5 = rows[0].pic5
+				iplocation(req.ip, function (error, res) {
+					console.log(res);
+				})
 				res.redirect('/home');
 			}
 			else

@@ -1,0 +1,54 @@
+<% include header %>
+
+
+<div class="ui segment">
+	<h3 class="ui right floated header">Your discussion history</h3>
+	<br><hr>
+		<% message.forEach(function(element) { %>
+			<% var content = element["content"] %>
+			<% var name = element["login"] %>
+			<% var date = element["sendat"] %>
+			<% var testt = element["sendto"] %>
+			<div class="ui feed">
+				<div class="event">
+					<div class="label">
+						<img src="/images/avatar/small/jenny.jpg">
+					</div>
+					<div class="content">
+						<div class="date">
+							3 days ago
+						</div>
+						<div class="summary">
+							You added <a>Jenny Hess</a> to your <a>coworker</a> group.
+						</div>
+					</div>
+				</div>
+			</div>
+		<% }) %>
+	</div>
+</div>
+
+
+
+<% include footer %>
+
+<script>
+	$('#replymsg').submit(function(event) {
+		event.preventDefault()
+		console.log('========')
+		socket.emit('newmsg', {message: $('#message').val(), recup: $('#recup').val(), usr: $('#usr').val(), id: socket.id })
+		$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+$('#usr').val()+'</a><div class="metadata"><span class="date"></span></div><div class="text">'+$('#message').val()+'</div></div></div>');
+		$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
+		$('#message').val('')
+		$('#message').focus()
+	})
+
+	socket.on('newmsgs', (function(message){
+	 		console.log(message.message)
+			$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+message.name+'</a><div class="metadata"><span class="date">'+message.h+':'+message.m+'</span></div><div class="text">'+message.message+'</div></div></div>');
+			$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
+	}))
+
+	
+
+</script>
