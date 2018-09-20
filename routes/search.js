@@ -165,35 +165,35 @@ router.get('/tag', function(req, res) {
 				if (err) console.log(err)
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ? ORDER BY id', [tag, login, 'female', 'male', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'male' && gender == 'female') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ? ORDER BY id', [tag, login, 'male', 'female', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'both') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.interest = ? AND users.fake = ? ORDER BY id', [tag, login, 'both', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.interest = ? AND users.fake = ?', [tag, login, 'both', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'male' && gender == 'male') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ? ORDER BY id', [tag, login, 'male', 'male', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'female' && gender == 'female') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ? ORDER BY id', [tag, login, 'female', 'female', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
