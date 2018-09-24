@@ -69,7 +69,22 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
                                   console.log('Email sent: ' + info.response);
                                 }
                               });
-                                req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                iplocation(req.ip, function (error, res) {
+                                    if (res.city)
+                                    {
+                                        connect.query("UPDATE users SET longitude = ?, lattitude = ?, city = ? WHERE login = ?", [res.lon, res.lat, res.city, login], function(err) {
+                                            if (err) throw err;
+                                            req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                        })
+                                    }
+                                    else
+                                    {
+                                        connect.query("UPDATE users SET longitude = ?, lattitude = ?, city = ? WHERE login = ?", [2.3488, 48.85341, "Paris", login], function(err) {
+                                            if (err) throw err;
+                                            req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                        })
+                                    }
+                                })
                                 res.redirect("/login");
                         })
                     }

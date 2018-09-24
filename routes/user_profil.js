@@ -38,7 +38,8 @@ router.get('/:id', function(req, res, next) {
 											interest = rows1[0].interest,
 											sumup = rows1[0].sumup,
 											city = rows1[0].city
-											online = rows1[0].online
+											online = rows1[0].online,
+											popularity = rows1[0].popu
 											if (rows1[0].profpic)
 											var profpic = rows1[0].profpic
 											if (rows1[0].pic2)
@@ -82,13 +83,13 @@ router.get('/:id', function(req, res, next) {
 															connect.query("UPDATE users SET popu = popu + 5 WHERE login = ?", [login], function(err) {
 																if (err) throw err
 																res.io.to(global.people[login]).emit('notif')
-																res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+																res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity})
 															})
 														}
 														else
 														{
 															res.io.to(global.people[login]).emit('notif')
-															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked})
+															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity})
 														}
 													})
 												}

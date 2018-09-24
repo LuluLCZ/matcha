@@ -26,7 +26,11 @@ router.post('/', function(req, res){
 			{
 				req.session.error = "It looks like your login doesn't exists"
 				res.redirect('/login')
-				console.log("It looks like your login doesn't exists")
+			}
+			else if (rows[0].confirm == 0)
+			{
+				req.session.error = "You need to confirm your account first, check your emails !"
+				res.redirect('/login');
 			}
 			else if (bcrypt.compareSync(pswd, rows[0].pswd))
 			{
@@ -54,10 +58,10 @@ router.post('/', function(req, res){
 					req.session.pic4 = rows[0].pic4
 				if (rows[0].pic5)
 					req.session.pic5 = rows[0].pic5
-				iplocation(req.ip, function (error, res) {
-					console.log(res);
+				connect.query("UPDATE users SET online = 1 WHERE login = ?", [login], function(err) {
+					if (err) throw err;
+					res.redirect('/home');
 				})
-				res.redirect('/home');
 			}
 			else
 			{

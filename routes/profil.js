@@ -15,8 +15,11 @@ router.get('/', function(req, res, next) {
 		var queryStringTag = "SELECT tag FROM tags WHERE login = ?";
 		connect.query(queryStringTag, [req.session.login], function(err, rows) {
 			if (err) console.log(err);
-			res.locals.tag = rows
-			res.render('profil', { title: 'Profil' })
+			connect.query("SELECT popu FROM users WHERE login = ?", [req.session.login], function(err, rows1) {
+				if (err) throw err
+				res.locals.tag = rows
+				res.render('profil', { title: 'Profil', popularity: rows1[0].popu })
+			})
 		})
 	}
 	else

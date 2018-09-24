@@ -78,6 +78,7 @@ app.use(function (req, res, next) {
 app.use(function(req, res, next) {
 	res.io = app.io
 	res.locals.ok = req.session.ok
+	global.me = req.session.login
 	res.locals.login = req.session.login
 	res.locals.gender = req.session.gender
 	res.locals.fname = req.session.fname
@@ -129,10 +130,7 @@ app.io.on('connection', function(socket) {
 	});
 	socket.on('connectionne', function(users) {
 		console.log('User '+users.login+' is now connected')
-		connect.query('UPDATE users SET online = 1 WHERE login = ?', [users.login], function(err) {
-			if (err) throw err
 			people[users.login] = socket.id
-		})
 	});
 	socket.on('newmsg', function(message){
 		if (message == '')
@@ -152,6 +150,7 @@ app.io.on('connection', function(socket) {
 					m: message.m,
 					recup: message.recup
 				})
+				io.to(people[message.recup]).emit('notif');
 			})
 		})
 	});

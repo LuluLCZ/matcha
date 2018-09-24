@@ -11,17 +11,17 @@
 			<% var name = element["login"] %>
 			<% var date = element["sendat"] %>
 			<% var testt = element["sendto"] %>
-				<div class="ui comment" id="one">
-					<div class="content" id="two">
-						<a class="author"><%=name%></a>
-						<div class="metadata">
-							<span class="date"><%=date.getHours()+':'+date.getMinutes()+' '+date.getDate()+'/'+date.getMonth()%></span>
-						</div>
-						<div class="text">
-							<%= content %>
+					<div class="ui comment" id="one">
+						<div class="content" id="two">
+							<a class="author"><%=name%></a>
+							<div class="metadata">
+								<span class="date"><%=date.getHours()+':'+date.getMinutes()+' '+date.getDate()+'/'+date.getMonth()%></span>
+							</div>
+							<div class="text">
+								<%= content %>
+							</div>
 						</div>
 					</div>
-				</div>
 			<% }) %>
 	</div>
 		<form action="" class="ui reply form" id="replymsg">
@@ -46,9 +46,15 @@
 	})
 
 	socket.on('newmsgs', (function(message){
-	 		console.log(message.message)
-			$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+message.name+'</a><div class="metadata"><span class="date">'+message.h+':'+message.m+'</span></div><div class="text">'+message.message+'</div></div></div>');
-			$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
+		console.log('<%- sendto %>');
+			if ((message.name != '<%- sendto %>' && message.name != '<%- me %> ') || (message.recup != '<%- sendto %>' && message.recup != '<%- me %>'))
+			{
+				return;
+			}
+			else{
+				$('#heyo').prepend('<div class="ui comment" id="one"><div class="content" id="two"><a class="author">'+message.name+'</a><div class="metadata"><span class="date">'+message.h+':'+message.m+'</span></div><div class="text">'+message.message+'</div></div></div>');
+				$('#heyo').animate({srollBot : $('#messages').prop('scrollHeight') }, 500);
+			}
 	}))
 
 	
