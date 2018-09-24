@@ -103,14 +103,33 @@ router.post('/edit_pail', function(req, res) {
 		nlogin = req.body.nlogin.trim()
 
 	var RegexLogin = /^([A-Za-z0-9]){4,12}$/gm
+	var RegexPw = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/gm
 	if (cpasswd && npasswd && vnpasswd)
 	{
-		npasswdhash = bcrypt.hashSync(npasswd, saltRound)
-		var queryString = "UPDATE users SET pswd = ? WHERE login = ?";
-		connect.query(queryString, [npasswdhash, req.session.login], function (err) {
-			if (err) throw err
-			req.session.success = "Your passord has been changed successfully"
-			res.redirect('/profil')
+		connect.query("SELECT pswd FROM users WHERE login = ?", [req.session.login], (err, rows1) => {
+			var npasswdhash = bcrypt.hashSync(npasswd, saltRound)
+			if (bcrypt.compareSync(cpasswd, rows1[0].pswd))
+			{
+				if (npasswd == vnpasswd && npasswd.search(RegexPw) != - 1)
+				{
+					var queryString = "UPDATE users SET pswd = ? WHERE login = ?";
+					connect.query(queryString, [npasswdhash, req.session.login], (err) => {
+						if (err) throw err
+						req.session.success = "Your passord has been changed successfully"
+						res.redirect('/profil')
+					})
+				}
+				else
+				{
+					req.session.error = "Your passwd sould contain at least 8char, one uper case, one lower case and one digit."
+					res.redirect('/profil');
+				}
+			}
+			else
+			{
+				req.session.error = "Your current password is not good"
+				res.redirect('/profil');
+			}
 		})
 	}
 	else if (nmail)
@@ -264,13 +283,12 @@ router.post('/edit_info', function(req, res) {
 })
 
 router.post('/upload_pic/:id', function(req, res) {
-	var fileupl = req.files.uploaded_image,
-		filename = fileupl.name
-
-		// console.log(fileupl)
+	var fileupl = req.files.uploaded_image
 	
-		if (fileupl.mimetype == "image/jpeg" ||fileupl.mimetype == "image/png" || fileupl.mimetype == "image/jpg")
+	
+		if ((fileupl) && (fileupl.mimetype == "image/jpeg" ||fileupl.mimetype == "image/png" || fileupl.mimetype == "image/jpg"))
 		{
+			filename = fileupl.name
 			fileupl.mv('public/images/'+filename, function(err) {
 				if (err)
 				{

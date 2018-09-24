@@ -202,35 +202,35 @@ router.get('/newUser', function(req, res) {
 				if (err) console.log(err)
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id', [login, 'female', 'male', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id DESC', [login, 'female', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Newest", me: req.session.login })
 						})
 					}
 					else if (interest == 'male' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id', [login, 'male', 'female', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id DESC', [login, 'male', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Newest", me: req.session.login })
 						})
 					}
 					else if (interest == 'both') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND interest = ? AND fake = ? ORDER BY id', [login, 'both', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND interest = ? AND fake = ? ORDER BY id DESC', [login, 'both', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Newest", me: req.session.login })
 						})
 					}
 					else if (interest == 'male' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id', [login, 'male', 'male', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id DESC', [login, 'male', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Newest", me: req.session.login })
 						})
 					}
 					else if (interest == 'female' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id', [login, 'female', 'female', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY id DESC', [login, 'female', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Newest", me: req.session.login })
@@ -263,7 +263,7 @@ router.get('/match', function(req, res) {
 				if (err) console.log(err)
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users INNER JOIN likes ON liked = login WHERE login != ? AND gender = ? AND interest = ? AND fake = ? ORDER BY users.id', [login, 'female', 'male', 0], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users INNER JOIN likes ON liker = login AND liked = ? WHERE gender = ? AND interest = ? AND fake = 0', [req.session.login, 'female', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Match them", me: req.session.login })

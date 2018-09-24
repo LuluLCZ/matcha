@@ -6,6 +6,9 @@ var router = express.Router()
 	
 	router.use(fileUpload())
 
+router.get('/', function(req, res) {
+	res.redirect('/home');
+})
 
 router.get('/:id', function(req, res, next) {
 	if (req.session && req.session.login)
@@ -23,8 +26,9 @@ router.get('/:id', function(req, res, next) {
 							var queryString1 = "SELECT * FROM users WHERE login = ?"
 							connect.query(queryString1, [login], function(err1, rows1, result1) {
 								if (err1) throw err1;
-								if (rows1)
+								if (rows1[0] != undefined)
 								{
+									console.log("ROWS1 "+rows1+"  "+rows1[0])
 									queryString2 = "SELECT * FROM tags WHERE login = ?"
 									connect.query(queryString2, [login], function(err2, rows2, result2) {
 										if (err2) throw err2;
@@ -100,6 +104,11 @@ router.get('/:id', function(req, res, next) {
 											})
 										})
 									})
+								}
+								else
+								{
+									req.session.error = "This user doesn't exist";
+									res.redirect('/home')
 								}
 							})
 						}

@@ -21,12 +21,12 @@ router.get('/', function(req, res) {
 					var slogin = row.slogin
 					connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users INNER JOIN matching ON login = slogin WHERE flogin = ?', [login], function(err, rows) {
 						if (err) console.log(err)
-						var profil = rows
-						res.render('matches', { title: 'Matches', profil: profil })
+							var profil = rows
+							res.render('matches', { title: 'Matches', profil: profil })
 					})
 				}
 				else
-				res.redirect('/');
+					res.redirect('/');
 			})
 		}
 		else
@@ -45,9 +45,19 @@ router.get('/:id', function(req, res) {
 		if (req.session.profpic)
 		{
 			var sendto = req.params.id;
-			connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
-				if (err) console.log(err)
-					res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
+			connect.query('SELECT * FROM block WHERE blocked = ? AND login = ?', [req.session.login, sendto], (err, rows) => {
+				if (rows[0])
+				{
+					req.session.error = "This user blocked you can't chat with him anymore"
+					res.redirect('/messages');
+				}
+				else
+				{
+					connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
+						if (err) console.log(err)
+						res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
+					})
+				}
 			})
 		}
 		else
