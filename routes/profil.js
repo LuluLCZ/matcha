@@ -5,8 +5,9 @@ var fileUpload = require('express-fileupload')
 var bcrypt = require('bcrypt')
 var router = express.Router()
 
+console.log('coucou1');
 router.use(fileUpload())
-
+console.log('coucou2');
 const saltRound = 10;
 
 router.get('/', function(req, res, next) {
@@ -281,10 +282,15 @@ router.post('/edit_info', function(req, res) {
 		res.redirect('/profil')
 })
 
+console.log('coucou');
+
 router.post('/upload_pic/:id', function(req, res) {
+	console.log('coucou3');
 	var fileupl = req.files.uploaded_image
 	
 	
+
+		console.log('got here : ' + fileupl);
 		if ((fileupl) && (fileupl.mimetype == "image/jpeg" ||fileupl.mimetype == "image/png" || fileupl.mimetype == "image/jpg"))
 		{
 			filename = fileupl.name
@@ -348,7 +354,10 @@ router.post('/upload_pic/:id', function(req, res) {
 			})
 		}
 		else
+		{
+			req.session.error = "Don't try to mess my matcha"
 			res.redirect('/profil')
+		}
 })
 
 module.exports = router

@@ -211,7 +211,6 @@ connect.query('CREATE TABLE IF NOT EXISTS `users` (\
 // -- Dumping data for table `users`
 // --
 
-require('./create_users.js');
 
 connect.end();
 

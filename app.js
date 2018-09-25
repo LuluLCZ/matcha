@@ -14,8 +14,8 @@ var session = require('express-session');
 var socketIOSession = require("socket.io.session");
 var requestIp = require('request-ip');
 
-app.io = require('socket.io')(server, {pingInterval: 10000,
-	pingTimeout: 50000,});
+app.io = require('socket.io')(server, {pingInterval: 100000,
+	pingTimeout: 600000,});
 
 
 var		session = require("express-session")({
@@ -38,7 +38,8 @@ var		index = require('./routes/index'),
 		forget = require('./routes/forget'),
 		newpass = require('./routes/newpass'),
 		fake = require('./routes/fake'),
-		search = require('./routes/search')
+		search = require('./routes/search'),
+		create_users = require('./config/create_users')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -116,6 +117,7 @@ app.use('/forget', forget)
 app.use('/reset', newpass)
 app.use('/fake', fake)
 app.use('/search', search)
+app.use('/create_users', create_users)
 
 var people = {}
 app.io.on('connection', function(socket) {
@@ -129,7 +131,7 @@ app.io.on('connection', function(socket) {
 		})
 	});
 	socket.on('connectionne', function(users) {
-		console.log('User '+users.login+' is now connected')
+		console.log('User '+users.login+' is now connecteds')
 			people[users.login] = socket.id
 	});
 	socket.on('newmsg', function(message){
