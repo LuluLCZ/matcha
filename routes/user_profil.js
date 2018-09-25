@@ -28,7 +28,6 @@ router.get('/:id', function(req, res, next) {
 								if (err1) throw err1;
 								if (rows1[0] != undefined)
 								{
-									console.log("ROWS1 "+rows1+"  "+rows1[0])
 									queryString2 = "SELECT * FROM tags WHERE login = ?"
 									connect.query(queryString2, [login], function(err2, rows2, result2) {
 										if (err2) throw err2;
@@ -43,7 +42,8 @@ router.get('/:id', function(req, res, next) {
 											sumup = rows1[0].sumup,
 											city = rows1[0].city
 											online = rows1[0].online,
-											popularity = rows1[0].popu
+											popularity = rows1[0].popu,
+											lastconn = rows1[0].lastconn
 											if (rows1[0].profpic)
 											var profpic = rows1[0].profpic
 											if (rows1[0].pic2)
@@ -58,7 +58,6 @@ router.get('/:id', function(req, res, next) {
 										}
 										connect.query("SELECT * FROM block WHERE login = ? AND blocked = ?", [req.session.login, login], function(err, rows3, result) {
 											if (err) console.log(err)
-											console.log( 'ICI LA ICI '+req.session.login+' '+login+' rows '+rows3);
 											if (rows3[0] != undefined)
 											{
 												var blocked = "yes"
@@ -87,13 +86,13 @@ router.get('/:id', function(req, res, next) {
 															connect.query("UPDATE users SET popu = popu + 5 WHERE login = ?", [login], function(err) {
 																if (err) throw err
 																res.io.to(global.people[login]).emit('notif')
-																res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity})
+																res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity, lastconn: lastconn})
 															})
 														}
 														else
 														{
 															res.io.to(global.people[login]).emit('notif')
-															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity})
+															res.render('user_profil', {title: login, login: req.session.login2, tagReq: tagReq, fname: fname, lname: lname, gender: gender, age: age, interest: interest, sumup: sumup, city: city, online: online, profpic: profpic, pic2: pic2, pic3: pic3, pic4: pic4, pic5: pic5, blocked: blocked, liked: liked, popularity: popularity, lastconn: lastconn})
 														}
 													})
 												}
@@ -146,10 +145,6 @@ router.get('/block/:id', function(req, res, next) {
 					{
 						connect.query("SELECT * FROM block WHERE blocked = ? AND login = ?", [login, req.session.login], function(rows, err, result) {
 							if (err) console.log(err)
-							console.log('PUTE DE ROWS3')
-							console.log(result)
-							console.log(login)
-							console.log(req.session.login)
 							if (!rows)
 							{
 								queryString2 = "INSERT INTO block(login, blocked) VALUES (?, ?)"
@@ -247,7 +242,6 @@ router.get('/like/:id', function(req, res, next) {
 						{
 							connect.query("SELECT * FROM likes WHERE liked = ? AND liker = ?", [login, req.session.login], function(rows, err, result) {
 								if (err) console.log(err)
-								console.log("eh merce "+rows)
 								if (!rows)
 								{
 									connect.query("INSERT INTO likes SET liker = ?, liked = ?", [req.session.login , login], function(err, result) {
@@ -256,7 +250,6 @@ router.get('/like/:id', function(req, res, next) {
 											if (err) throw err
 											connect.query("SELECT * FROM likes WHERE liker = ? AND liked = ?", [login, req.session.login], function(err, rows2, result2) {
 												if (err) throw err
-												console.log("PROBLEME "+rows2[0])
 												if (rows2[0] != undefined)
 												{
 													connect.query("INSERT INTO matching SET flogin = ?, slogin = ?", [req.session.login, login], function(err, rows3, result3) {

@@ -38,38 +38,37 @@ router.get('/age', function(req, res) {
 				sumup = req.session.sumup
 			connect.query('SELECT * FROM users WHERE login != ?', [login], function(err, row, result) {
 				if (err) console.log(err)
-				console.log(age);
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'female', 'male', 0, age], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'female', 'male', 0, age], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'male' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'male', 'female', 0, age], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'male', 'female', 0, age], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'both') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'both', 0, age], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'both', 0, age], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'male' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'male', 'male', 0, age], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'male', 'male', 0, age], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'female' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'female', 'female', 0, age], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND age >= ? ORDER BY age', [login, 'female', 'female', 0, age], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
@@ -103,35 +102,35 @@ router.get('/city', function(req, res) {
 				if (err) console.log(err)
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'female', 'male', 0, city], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'female', 'male', 0, city], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'male' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'male', 'female', 0, city], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'male', 'female', 0, city], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'both') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'both', 0, city], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'both', 0, city], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'male' && gender == 'male') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'male', 'male', 0, city], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'male', 'male', 0, city], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
 						})
 					}
 					else if (interest == 'female' && gender == 'female') {
-						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'female', 'female', 0, city], function(err, row) {
+						connect.query('SELECT login, gender, fname, lname, age, interest, sumup, profpic, online, lastconn FROM users WHERE login != ? AND gender = ? AND interest = ? AND fake = ? AND city = ? ORDER BY age', [login, 'female', 'female', 0, city], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search"})
@@ -165,35 +164,35 @@ router.get('/tag', function(req, res) {
 				if (err) console.log(err)
 				if (row.lenght != 0) {
 					if (interest == 'female' && gender == 'male') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'male', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online, lastconn FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'male' && gender == 'female') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'female', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online, lastconn FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'both') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.interest = ? AND users.fake = ?', [tag, login, 'both', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online, lastconn FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.interest = ? AND users.fake = ?', [tag, login, 'both', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'male' && gender == 'male') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'male', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online, lastconn FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'male', 'male', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })
 						})
 					}
 					else if (interest == 'female' && gender == 'female') {
-						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'female', 0], function(err, row) {
+						connect.query('SELECT users.login, users.gender, users.fname, users.lname, users.age, users.interest, users.sumup, users.profpic, users.online, lastconn FROM users INNER JOIN tags ON tags.login = users.login WHERE tags.tag = ? AND users.login != ? AND users.gender = ? AND users.interest = ? AND users.fake = ?', [tag, login, 'female', 'female', 0], function(err, row) {
 							if (err) console.log(err)
 							var profil = row
 							res.render('home', { title: 'Home', profil: profil, filter: "Search" })

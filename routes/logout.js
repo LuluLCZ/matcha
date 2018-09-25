@@ -4,8 +4,9 @@ var connect = require('../config/database.js')
 var session = require('express-session')
 
 router.get('/', function(req, res) {
-	queryString = "UPDATE users SET online = 0 WHERE login = ?"
-	connect.query(queryString, [req.session.login], function (err) {
+	var date = new Date();
+	queryString = "UPDATE users SET online = ?, lastconn = ? WHERE login = ?"
+	connect.query(queryString, [0, date, req.session.login], function (err) {
 		if (err) throw err
 	})
 	req.session.destroy()

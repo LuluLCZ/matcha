@@ -48,6 +48,7 @@
 					<% var login = element["login"] %>
 					<% var pic = element["profpic"] %>
 					<% var online = element['online'] %>
+					<% var lastconn = element['lastconn'] %>
 					<div class="ui people shape">
 						<div class="sides">
 							<div class="side active">
@@ -83,7 +84,7 @@
 												<% } %>
 										</span>
 										<span class="right floated">
-										Joined in 2017
+										Last seen: <%=lastconn.getHours()+':'+lastconn.getMinutes()+' '+lastconn.getDate()+'/'+lastconn.getMonth()%>
 										</span>
 									</div>
 								</div>

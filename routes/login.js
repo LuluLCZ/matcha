@@ -67,8 +67,6 @@ router.post('/', function(req, res){
 			{
 				req.session.error = "It looks like your login and your password don't match, please try again with another combinaison";
 				res.redirect('/login')
-				console.log(rows);
-				console.log(pswd, login);
 				
 			}
 		})

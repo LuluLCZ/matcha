@@ -97,7 +97,6 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
             else
             {
                 res.redirect('/');
-                console.log('problem, all the variables haven\'t been registered successfully');
             }
       });
       // define the success route

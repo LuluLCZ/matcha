@@ -163,7 +163,6 @@ router.post('/edit_pail', function(req, res) {
 		{
 			connect.query("SELECT * FROM users WHERE login = ?", [nlogin], function(err, rows, result) {
 				if (err) throw err;
-				console.log("REGARDER ICI"+ rows);
 				if (rows[0])
 				{
 					req.session.error = "The login is already taken, please try another one"
