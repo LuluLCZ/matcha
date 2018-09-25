@@ -53,9 +53,20 @@ router.get('/:id', function(req, res) {
 				}
 				else
 				{
-					connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
-						if (err) console.log(err)
-						res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
+					connect.query('SELECT * FROM matching WHERE flogin = ? AND slogin = ?', [req.session.login, sendto], (err, rows1) => {
+						if (err) throw err
+						if (!rows1[0])
+						{
+							req.session.error = "You didn't connect with " + sendto + ", you can't chat with this user.";
+							res.redirect('/home');
+						}
+						else
+						{
+							connect.query('SELECT * FROM messages WHERE (login = ? AND sendto = ?) OR (login = ? AND sendto = ?) ORDER BY id DESC', [sendto, req.session.login, req.session.login, sendto], function(err, row, result) {
+								if (err) console.log(err)
+								res.render('messages', {title : 'Messages', me: req.session.login, sendto: sendto, message: row})
+							})
+						}
 					})
 				}
 			})
