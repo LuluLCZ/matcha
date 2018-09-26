@@ -34,65 +34,73 @@ var {AgeFromDateString, AgeFromDate} = require('age-calculator')
             //verifier que toutes les variables sont bien recuperees
             if (login && gender && fname && lname && pswd && cpswd && email && city && age && interest)
             {
-                var queryString = "SELECT * FROM users WHERE login = ? OR email = ?"
-                connect.query(queryString, [req.body.login, req.body.email],function(err, rows, fields) {
-                    if (err) throw err;
-                    console.log("Everythng's good");
-                    if (!rows[0])
-                    {
-                        tohash = "alaiseblaise"+Math.floor(Math.random() * Math.floor(555))
-                        var hashh = bcrypt.hashSync(tohash, saltRound);
-                        var hash = "";
-                        hash = hashh.replace(/\//g , hash);
-                        
-                        connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?, hash = ?", [login, gender, fname, lname, passwdhash, email, city, age, interest, hash], function(err, result) {
-                            if (err) throw err;
-                            var transporter = nodemailer.createTransport({
-                                service: 'gmail',
-                                auth: {
-                                  user: 'matchabylacaze@gmail.com',
-                                  pass: 'Poutrelle123'
-                                }
-                              });
-                              
-                              var mailOptions = {
-                                from: 'matchabylacaze@gmail.com',
-                                to: email,
-                                subject: 'Welcome to Matcha !',
-                                text: 'Your confirmation link is : '+'http://localhost:3306/confirm/'+hash
-                              };
-                              
-                              transporter.sendMail(mailOptions, function(error, info){
-                                if (error) {
-                                  console.log(error);
-                                } else {
-                                  console.log('Email sent: ' + info.response);
-                                }
-                              });
-                                iplocation(req.ip, function (error, res) {
-                                    if (res.city)
-                                    {
-                                        connect.query("UPDATE users SET longitude = ?, latitude = ?, city = ? WHERE login = ?", [res.lon, res.lat, res.city, login], function(err) {
-                                            if (err) throw err;
-                                            req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
-                                        })
+                if (login.length <= 20 && fname.length <= 25 && lname.length <= 25 && pswd.length <= 25 && email.length <= 35 && city.length <= 35)
+                {
+                    var queryString = "SELECT * FROM users WHERE login = ? OR email = ?"
+                    connect.query(queryString, [req.body.login, req.body.email],function(err, rows, fields) {
+                        if (err) throw err;
+                        console.log("Everythng's good");
+                        if (!rows[0])
+                        {
+                            tohash = "alaiseblaise"+Math.floor(Math.random() * Math.floor(555))
+                            var hashh = bcrypt.hashSync(tohash, saltRound);
+                            var hash = "";
+                            hash = hashh.replace(/\//g , hash);
+                            
+                            connect.query("INSERT INTO users SET login = ?, gender = ?, fname = ?, lname = ?, pswd = ?, email = ?, city = ?, age = ?, interest = ?, hash = ?", [login, gender, fname, lname, passwdhash, email, city, age, interest, hash], function(err, result) {
+                                if (err) throw err;
+                                var transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: {
+                                    user: 'matchabylacaze@gmail.com',
+                                    pass: 'Poutrelle123'
                                     }
-                                    else
-                                    {
-                                        connect.query("UPDATE users SET longitude = ?, latitude = ?, city = ? WHERE login = ?", [2.3488, 48.85341, "Paris", login], function(err) {
-                                            if (err) throw err;
-                                            req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
-                                        })
+                                });
+                                
+                                var mailOptions = {
+                                    from: 'matchabylacaze@gmail.com',
+                                    to: email,
+                                    subject: 'Welcome to Matcha !',
+                                    text: 'Your confirmation link is : '+'http://localhost:3306/confirm/'+hash
+                                };
+                                
+                                transporter.sendMail(mailOptions, function(error, info){
+                                    if (error) {
+                                    console.log(error);
+                                    } else {
+                                    console.log('Email sent: ' + info.response);
                                     }
-                                })
-                                res.redirect("/login");
-                        })
-                    }
-                    else
-                    {
-                        res.redirect("/");
-                    }
-                })
+                                });
+                                    iplocation(req.ip, function (error, res) {
+                                        if (res.city)
+                                        {
+                                            connect.query("UPDATE users SET longitude = ?, latitude = ?, city = ? WHERE login = ?", [res.lon, res.lat, res.city, login], function(err) {
+                                                if (err) throw err;
+                                                req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                            })
+                                        }
+                                        else
+                                        {
+                                            connect.query("UPDATE users SET longitude = ?, latitude = ?, city = ? WHERE login = ?", [2.3488, 48.85341, "Paris", login], function(err) {
+                                                if (err) throw err;
+                                                req.session.info = "Vous avez recu un mail avec le lien de confirmation sur votre adresse mail."
+                                            })
+                                        }
+                                    })
+                                    res.redirect("/login");
+                            })
+                        }
+                        else
+                        {
+                            res.redirect("/");
+                        }
+                    })
+                }
+                else
+                {
+                    req.session.error = "Your informations are too big, please reduce the lenght."
+                    res.redirect('/home');
+                }
             }
             else
             {

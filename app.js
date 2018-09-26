@@ -15,7 +15,7 @@ var socketIOSession = require("socket.io.session");
 var requestIp = require('request-ip');
 
 app.io = require('socket.io')(server, {pingInterval: 100000,
-	pingTimeout: 600000,});
+	pingTimeout: 60000000000,});
 
 
 var		session = require("express-session")({

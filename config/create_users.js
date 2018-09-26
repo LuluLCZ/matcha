@@ -93,6 +93,10 @@ router.get('/', function(req, res) {
 				connect.query('INSERT INTO tags SET login = ?, tag = ?', [login, tag4], (err) => {
 					if (err) throw err;
 				})
+				var like = "user"+getRandomInt(650);
+				connect.query('INSERT INTO likes SET liker = ?, liked = ?', [login, like], (err) => {
+					if (err) throw err;
+				})
 				i++
 			}
 		}

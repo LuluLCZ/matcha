@@ -5,9 +5,7 @@ var fileUpload = require('express-fileupload')
 var bcrypt = require('bcrypt')
 var router = express.Router()
 
-console.log('coucou1');
 router.use(fileUpload())
-console.log('coucou2');
 const saltRound = 10;
 
 router.get('/', function(req, res, next) {
@@ -104,7 +102,7 @@ router.post('/edit_pail', function(req, res) {
 		nlogin = req.body.nlogin.trim()
 
 	var RegexLogin = /^([A-Za-z0-9]){4,12}$/gm
-	var RegexPw = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/gm
+	var RegexPw = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,25}$/gm
 	if (cpasswd && npasswd && vnpasswd)
 	{
 		connect.query("SELECT pswd FROM users WHERE login = ?", [req.session.login], (err, rows1) => {
@@ -135,23 +133,31 @@ router.post('/edit_pail', function(req, res) {
 	}
 	else if (nmail)
 	{
-		connect.query("SELECT * FROM users WHERE email = ?", [nmail], function(err, rows, result) {
-			if (rows[0])
-			{
-				req.session.error = "The mail is already taken, please try another one"
-				res.redirect('/profil')
-			}
-			else
-			{
-				var queryStringMail = "UPDATE users SET email = ? WHERE login = ?"
-				connect.query(queryStringMail, [nmail, req.session.login], function(err) {
-					if (err) throw err
-					req.session.success = "Your email has been changed successfully";
-					req.session.login = nlogin
+		if (nmail.length <= 45)
+		{
+			connect.query("SELECT * FROM users WHERE email = ?", [nmail], function(err, rows, result) {
+				if (rows[0])
+				{
+					req.session.error = "The mail is already taken, please try another one"
 					res.redirect('/profil')
-				})
-			}
-		})
+				}
+				else
+				{
+					var queryStringMail = "UPDATE users SET email = ? WHERE login = ?"
+					connect.query(queryStringMail, [nmail, req.session.login], function(err) {
+						if (err) throw err
+						req.session.success = "Your email has been changed successfully";
+						req.session.login = nlogin
+						res.redirect('/profil')
+					})
+				}
+			})
+		}
+		else
+		{
+			req.session.error = "Your email is too long"
+			res.redirect('/profil');
+		}
 	}
 	else if (nlogin)
 	{
@@ -244,53 +250,82 @@ router.post('/edit_info', function(req, res) {
 
 	if (fname)
 	{
-		var queryString = "UPDATE users SET fname = ? WHERE fname = ? AND login = ?";
-		connect.query(queryString, [fname, req.session.fname, req.session.login], function(err, results) {
-			if (err) throw err;
-			req.session.fname = fname;
+		if (fname.length <= 25)
+		{
+			var queryString = "UPDATE users SET fname = ? WHERE fname = ? AND login = ?";
+			connect.query(queryString, [fname, req.session.fname, req.session.login], function(err, results) {
+				if (err) throw err;
+				req.session.fname = fname;
+				res.redirect('/profil');
+			})
+		}
+		else
+		{
+			req.session.error = "You're trying to change your first name in a too long string"
 			res.redirect('/profil');
-		})
+		}
 	}
 	else if (lname)
 	{
-		var queryString = "UPDATE users SET lname = ? WHERE lname = ? AND login = ?";
-		connect.query(queryString, [lname, req.session.lname, req.session.login], function(err, results) {
-			if (err) throw err;
-			req.session.lname = lname;
+		if (lname.length <= 25)
+		{
+			var queryString = "UPDATE users SET lname = ? WHERE lname = ? AND login = ?";
+			connect.query(queryString, [lname, req.session.lname, req.session.login], function(err, results) {
+				if (err) throw err;
+				req.session.lname = lname;
+				res.redirect('/profil');
+			})
+		}
+		else
+		{
+			req.session.error = "You're trying to change your last name in a too long string"
 			res.redirect('/profil');
-		})
+		}
 	}
 	else if (gender)
 	{
-		var queryString = "UPDATE users SET gender = ? WHERE login = ?";
-		connect.query(queryString, [gender, req.session.login], function(err, results) {
-			if (err) throw err;
-			req.session.gender = gender;
-			res.redirect('/profil');
-		})
+		if (gender != 'male' && gender != 'female' && gender != 'other')
+		{
+			req.session.error = "You can only choose male or female or other"
+			res.redirect('/profil')
+		}
+		else
+		{
+			var queryString = "UPDATE users SET gender = ? WHERE login = ?";
+			connect.query(queryString, [gender, req.session.login], function(err, results) {
+				if (err) throw err;
+				req.session.gender = gender;
+				res.redirect('/profil');
+			})
+		}
 	}
 	else if (interest)
 	{
-		var queryString = "UPDATE users SET interest = ? WHERE login = ?";
-		connect.query(queryString, [interest, req.session.login], function(err, results) {
-			if (err) throw err;
-			req.session.interest = interest;
-			res.redirect('/profil');
-		})
+		if (interest != 'male' && interest != 'female' && interest != 'both')
+		{
+			req.session.error = "You can only choose male or female or both"
+			res.redirect('/profil')
+		}
+		else
+		{
+			var queryString = "UPDATE users SET interest = ? WHERE login = ?";
+			connect.query(queryString, [interest, req.session.login], function(err, results) {
+				if (err) throw err;
+				req.session.interest = interest;
+				res.redirect('/profil');
+			})
+		}
 	}
 	else
 		res.redirect('/profil')
 })
 
-console.log('coucou');
 
 router.post('/upload_pic/:id', function(req, res) {
-	console.log('coucou3');
 	var fileupl = req.files.uploaded_image
 	
 	
 
-		console.log('got here : ' + fileupl);
 		if ((fileupl) && (fileupl.mimetype == "image/jpeg" ||fileupl.mimetype == "image/png" || fileupl.mimetype == "image/jpg"))
 		{
 			filename = fileupl.name
